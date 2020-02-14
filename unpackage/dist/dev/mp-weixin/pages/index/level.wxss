@@ -1,0 +1,58 @@
+@charset "UTF-8";
+/* 颜色定义 */
+/* 嫣红 */
+/* 桔橙 */
+/* 明黄 */
+/* 橄榄 */
+/* 森绿 */
+/* 天青 */
+/* 海蓝 */
+/* 姹紫 */
+/* 木槿 */
+/* 桃粉 */
+/* 棕褐 */
+/* 玄灰 */
+/* 草灰 */
+/* 墨黑 */
+/* 雅白 */
+.level.data-v-2cb8216d {
+  margin-top: -40rpx;
+  padding: 0 80rpx;
+}
+.level .progress-wrapper.data-v-2cb8216d {
+    margin-bottom: 40rpx;
+}
+.level .progress-wrapper .progress.data-v-2cb8216d {
+      width: 240rpx;
+}
+.level .progress-wrapper .progress-label.data-v-2cb8216d {
+      margin-left: 24rpx;
+      padding: 2rpx 10rpx;
+      font-size: 24rpx;
+      font-weight: 500;
+      color: #fff;
+      border-radius: 8rpx;
+      background-color: #7f41c1;
+}
+.level .score.data-v-2cb8216d {
+    color: #fff;
+    padding: 20rpx 30rpx;
+    background-color: #7f41c1;
+    border-radius: 200rpx;
+}
+.level .score .score-item.data-v-2cb8216d {
+      text-align: center;
+      padding: 0 70rpx;
+      font-size: 36rpx;
+      font-weight: 500;
+}
+.level .score .score-item .label.data-v-2cb8216d {
+        margin-top: 12rpx;
+        font-size: 28rpx;
+        font-weight: 400;
+}
+.level .score .score-item + .score-item.data-v-2cb8216d {
+      border-left: 1px solid;
+      border-color: rgba(255, 255, 255, 0.25);
+}
+

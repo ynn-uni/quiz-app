@@ -1,0 +1,110 @@
+<template>
+	<view class="user-pannel flex justify-between padding">
+		<view class="user-self bg-blue">
+			<view class="user-avatar">
+				<open-data type="userAvatarUrl"></open-data>
+			</view>
+			<view class="pannel-text">
+				<open-data type="userNickName"></open-data>
+				<view class="text-lg">
+					{{ self.content || 0 }}
+				</view>
+			</view>
+		</view>
+		<view v-if="pk" class="timer">
+			<view class="timer-content text-sm">{{ time }}s</view>
+		</view>
+		<view  v-if="pk" class="user-opponent bg-red">
+			<view class="user-avatar">
+				<open-data type="userAvatarUrl"></open-data>
+			</view>
+			<view class="pannel-text text-right">
+				<open-data type="userNickName"></open-data>
+				<view class="text-lg">
+					{{ self.content || 0 }}
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			pk: {
+				type: Boolean,
+				default: false
+			},
+			self: {
+				type: Object,
+				default: () => {}
+			},
+			opponent: {
+				type: Object,
+				default: () => {}
+			},
+			time: {
+				type: Number,
+				default: 10
+			}
+		},
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.user-pannel {
+		.user-self,
+		.user-opponent {
+			display: flex;
+			min-width: 320rpx;
+			align-items: center;
+			padding: 12rpx;
+			border-radius: 5000rpx;
+			color: #fff;
+		}
+		.user-self {
+			padding-right: 32rpx;
+		}
+		.user-opponent {
+			flex-direction: row-reverse;
+		}
+		
+		.user-avatar {
+			width: 72rpx;
+			height: 72rpx;
+			border-radius: 72rpx;
+			border: 4px solid #fff;
+			overflow: hidden;
+		}
+		.pannel-text {
+			font-size: 20rpx;
+			margin-left: 20rpx;
+			margin-right: 20rpx;
+		}
+		.timer {
+			position: absolute;
+			left: 50%;
+			width: 110rpx;
+			height: 110rpx;
+			transform: translate(-50%, -6rpx);
+			background: #fff;
+			border: 10rpx solid #5c039f;
+			border-radius: 50%;
+			padding: 20rpx;
+			.timer-content {
+				height: 100%;
+				line-height: 60rpx;
+				text-align: center;
+				color: #fff;
+				background: #5c039f;
+				border-radius: 50%;
+				
+			}
+		}
+	}
+</style>

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "index-header": "/pages/index/header",
+    "user-level": "/pages/index/level"
+  }
+}

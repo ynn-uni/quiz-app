@@ -1,0 +1,1 @@
+<view class="bg-linear"><cu-custom vue-id="1" isBack="{{true}}" bind:__l="__l" vue-slots="{{['backText','content']}}"><view slot="backText">返回</view><view slot="content">竞猜答题</view></cu-custom><user-pannel vue-id="2" self="{{userSelf}}" bind:__l="__l"></user-pannel><subject vue-id="3" list="{{subjectList}}" bind:__l="__l"></subject></view>
