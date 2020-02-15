@@ -48,7 +48,7 @@
 			},
 			bgImage: {
 				type: String,
-				default: 'default'
+				default: ''
 			},
 		},
 		methods: {
