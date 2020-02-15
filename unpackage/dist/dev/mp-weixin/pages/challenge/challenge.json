@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "答题挑战",
-  "usingComponents": {
-    "user-pannel": "/components/user-pannel",
-    "subject": "/components/subject"
-  }
-}

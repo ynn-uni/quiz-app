@@ -164,7 +164,7 @@ var _default =
 
     bgImage: {
       type: String,
-      default: 'default' } },
+      default: '' } },
 
 
   methods: {
