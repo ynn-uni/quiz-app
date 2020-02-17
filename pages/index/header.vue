@@ -5,7 +5,7 @@
 				<image src="../../static/images/share.png"></image>
 				<view class="label">分享</view>
 			</navigator>
-			<navigator class="flex flex-direction margin-top-sm">
+			<navigator class="flex flex-direction margin-top-sm" url="/pages/ranking/ranking">
 				<image src="../../static/images/board.png"></image>
 				<view class="label">排行榜</view>
 			</navigator>
@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view class="flex flex-direction">
-			<navigator class="flex flex-direction">
+			<navigator class="flex flex-direction" url="/pages/rule/rule">
 				<image src="../../static/images/rule.png"></image>
 				<view class="label">规则</view>
 			</navigator>
