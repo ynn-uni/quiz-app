@@ -1,5 +1,9 @@
 ## 答题小程序
 
+## 文档
+
+设计图蓝湖地址：https://lanhuapp.com/web/#/item/project/board?pid=756cb0c5-8aef-4534-8a93-d3958ff74829
+
 ## 开发说明
 
 ### CSS样式
