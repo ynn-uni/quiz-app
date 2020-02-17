@@ -2,32 +2,54 @@
 	<view class="bg-linear">
 		<cu-custom :isBack="true">
 			<block slot="backText">返回</block>
-			<block slot="content">竞猜答题</block>
+			<block slot="content">擂台挑战</block>
 		</cu-custom>
-		<user-pannel :pk="true" :self="userSelf" :opponent="userOpponent" />
-		<subject :list="subjectList" :auto-next="true"></subject>
+		<arrange v-if="isArrange"></arrange>
+		<ready v-if="isReady"></ready>
+		<quiz v-if="isQuiz"></quiz>
 	</view>
 </template>
 
 <script>
-import UserPannel from '../../components/user-pannel.vue';
-import Subject from '../../components/subject.vue'
+import Arrange from './arrange'
+import Ready from './ready'
+import Quiz from './quiz.vue'
 export default {
-	components: { UserPannel, Subject},
+	components: { Arrange, Ready, Quiz },
 	data() {
 		return {
-			userSelf: {
-				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-				name: '陈波波',
-				content: '0'
-			},
-			userOpponent: {
-				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-				name: '陈波波',
-				content: '0'
-			},
-			subjectList: this.subjectList
+			isArrange: true,
+			isReady: false,
+			isQuiz: false,
+			opponent: null
 		};
+	},
+	mounted() {
+		setTimeout(() => {
+			this.getOpponent()
+		}, 2000)
+	},
+	watch: {
+		isArrange(val) {
+			if (val === true) {
+				this.displayReady()
+			}
+		},
+		
+	},
+	methods: {
+		getOpponent() {
+			this.opponent = {
+				name: 'test',
+				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+				level: 4
+			}
+			this.isArrange = false
+		},
+		displayReady() {
+			this.isReady = true
+			set
+		}
 	}
 };
 </script>
