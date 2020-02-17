@@ -1,6 +1,12 @@
 <script>
 	import Vue from 'vue'
 	export default {
+		globalData: {
+			nickname: '空城',
+			avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+			level: 4,
+			victory: 2
+		},
 		onLaunch: function() {
 			uni.getSystemInfo({
 				success: function(e) {
