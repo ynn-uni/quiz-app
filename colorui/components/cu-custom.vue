@@ -31,7 +31,8 @@
 				var bgImage = this.bgImage;
 				var style = `height:${CustomBar}px;padding-top:${StatusBar}px;`;
 				if (this.bgImage) {
-					style = `${style}background-image:url(${bgImage});`;
+					// hack 想使用bgImage的样式
+					// style = `${style}background-image:url(${bgImage});`;
 				}
 				console.log(this.bgImage)
 				return style
@@ -48,7 +49,7 @@
 			},
 			bgImage: {
 				type: String,
-				default: ''
+				default: ' ' // hack
 			},
 		},
 		methods: {
