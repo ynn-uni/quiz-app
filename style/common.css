@@ -8,6 +8,9 @@
 	border-radius: 14px;
 }
 
-.btn-hover-class {
-	transform: translate(1rpx, 1rpx);
+.btn-hover-trans {
+	transform: translate(4rpx, 4rpx);
+}
+.btn-hover-scale {
+	transform: scale(90%);
 }
