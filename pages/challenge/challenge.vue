@@ -1,13 +1,13 @@
 <template>
-	<view class="bg-linear">
-		<cu-custom :isBack="true">
-			<block slot="backText">返回</block>
-			<block slot="content">擂台挑战</block>
-		</cu-custom>
-		<arrange v-if="isArrange"></arrange>
-		<ready v-if="isReady"></ready>
-		<quiz v-if="isQuiz"></quiz>
-	</view>
+  <view class="bg-linear">
+    <cu-custom :isBack="true">
+      <block slot="backText">返回</block>
+      <block slot="content">擂台挑战</block>
+    </cu-custom>
+    <arrange v-if="isArrange"></arrange>
+    <ready v-if="isReady"></ready>
+    <quiz v-if="isQuiz"></quiz>
+  </view>
 </template>
 
 <script>
@@ -18,38 +18,44 @@ export default {
 	components: { Arrange, Ready, Quiz },
 	data() {
 		return {
-			isArrange: true,
-			isReady: false,
+			isArrange: false,
+			isReady: true,
 			isQuiz: false,
 			opponent: null
 		};
 	},
 	mounted() {
-		setTimeout(() => {
-			this.getOpponent()
-		}, 2000)
+		this.getOpponent().then(() => {
+			this.displayReady()
+		})
 	},
 	watch: {
-		isArrange(val) {
-			if (val === true) {
-				this.displayReady()
+		isReady(val) {
+			if (val === false) {
+				this.isQuiz = true
 			}
 		},
-		
 	},
 	methods: {
 		getOpponent() {
-			this.opponent = {
-				name: 'test',
-				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-				level: 4
-			}
-			this.isArrange = false
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					this.opponent = {
+						name: 'test',
+						avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+						level: 4
+					}
+					this.isArrange = false
+					resolve()
+				}, 2000)
+			})
 		},
 		displayReady() {
 			this.isReady = true
-			set
-		}
+			setTimeout(() => {
+				this.isReady = false
+			}, 3000)
+		},
 	}
 };
 </script>

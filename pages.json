@@ -2,14 +2,11 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		// {
-		// 	"path": "pages/index/index",
+		// 	"path": "pages/challenge/challenge",
 		// 	"style": {
 		// 		"navigationBarTitleText": "当前开发页"
 		// 	}
 		// }, 
-		
-		
-		
 		{
 			"path": "pages/index/index",
 			"style": {}
@@ -23,14 +20,12 @@
 			"style": {
 				"navigationBarTitleText": "答题挑战"
 			}
-		},
-		{
+		}, {
 			"path": "pages/ranking/ranking",
 			"style": {
 				"navigationBarTitleText": "排行榜"
 			}
-		},
-		{
+		}, {
 			"path": "pages/rule/rule",
 			"style": {
 				"navigationBarTitleText": "规则说明"
