@@ -23,7 +23,7 @@
 				<image src="../../static/images/rule.png"></image>
 				<view class="label">规则</view>
 			</navigator>
-			<navigator class="flex flex-direction margin-top-sm">
+			<navigator class="flex flex-direction margin-top-sm" url="/pages/reward/reward">
 				<image src="../../static/images/reward.png"></image>
 				<view class="label">奖励</view>
 			</navigator>

@@ -68,7 +68,9 @@
 		border-radius:16rpx;
 		padding: 20rpx 40rpx;
 		margin-left: 35rpx;
-		
+		position: fixed;
+		top: 120rpx;
+		bottom: 40rpx;
 		.title{
 			font-size:36rpx;
 			font-weight: 500;
