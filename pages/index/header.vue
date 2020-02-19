@@ -12,7 +12,9 @@
 		</view>
 		<view class="user-info">
 			<view class="avatar">
-				<open-data type="userAvatarUrl"></open-data>
+				<navigator url="/pages/my/my">
+					<open-data type="userAvatarUrl"></open-data>
+				</navigator>
 			</view>
 			<view class="nickname">
 				<open-data type="userNickName"></open-data>

@@ -8,8 +8,28 @@
 			<view class="num">
 				x1
 			</view>
-			<view class="btn active">
-				点击兑换
+			<!-- <view class="btn">
+				兑换完成
+			</view> -->
+			<button class="btn active" @tap="showModal" data-target="DialogModal1">点击兑换</button>
+			
+		</view>
+		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+			<view class="cu-dialog">
+				
+				<view class="padding-xl text-center my_text">
+					您的兑换申请已提交，
+					<br>
+					2个工作日内工作人员会联系您。
+				</view>
+				<view class="cu-bar bg-white flex justify-center">
+					
+						<view class="my_btn" @tap="hideModal">
+							确定
+						</view>
+						
+		
+				</view>
 			</view>
 		</view>
 	</view>
@@ -19,7 +39,7 @@
 	export default {
 		data() {
 			return {
-				
+				modalName: null,
 			}
 		},
 		props:{
@@ -27,7 +47,12 @@
 		},
 		
 		methods: {
-			
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			}
 		}
 	}
 </script>
@@ -67,10 +92,31 @@
 				font-size: 22rpx;
 				padding: 4rpx;
 			}
+			
 			.active{
 				background:rgba(160,66,187,1);
 				color: #fff;
 			}
 		}
+		.cu-modal{
+			.cu-dialog{
+				.my_text{
+					font-size: 24rpx;
+					color:rgba(84,84,84,1);
+					line-height: 44rpx;
+				}
+				.cu-bar{
+					.my_btn{
+						font-size:32rpx;
+						font-weight:500;
+						color:rgba(95,2,153,1);
+						line-height:44rpx;
+					}
+				}
+				
+			}
+			
+		}
+		
 	}
 </style>

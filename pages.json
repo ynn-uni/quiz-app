@@ -34,12 +34,19 @@
 			}
 		},
 		{
+		    "path" : "pages/my/my",
+		    "style": {
+		    	"navigationBarTitleText": "个人资料"
+		    }
+		},
+		{
 			"path": "pages/rule/rule",
 			"style": {
 				"navigationBarTitleText": "规则说明"
 			}
 		}
 	   
+       
     ],
 	"globalStyle": {
 		"mp-alipay": {
