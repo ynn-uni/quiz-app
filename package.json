@@ -1,0 +1,12 @@
+{
+  "name": "knowledge-quiz",
+  "version": "1.0.0",
+  "description": "'答题小程序'",
+  "main": "main.js",
+  "repository": "https://github.com/ynn-uni/quiz-app.git",
+  "author": "mahy50 <934037783@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ws": "^7.2.1"
+  }
+}
