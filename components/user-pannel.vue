@@ -7,7 +7,7 @@
 			<view class="pannel-text">
 				<text>{{ user.name }}</text>
 				<view class="text-lg">
-					{{ user.content || 0 }}
+					{{ user.score || 0 }}
 				</view>
 			</view>
 		</view>
@@ -21,7 +21,7 @@
 			<view class="pannel-text text-right">
 				<text>{{ opponent.name }}</text>
 				<view class="text-lg">
-					{{ opponent.content || 0 }}
+					{{ opponent.score || 0 }}
 				</view>
 			</view>
 		</view>
