@@ -2,12 +2,12 @@
 	<view class="user-pannel flex justify-between padding">
 		<view class="user-self bg-blue">
 			<view class="user-avatar">
-				<open-data type="userAvatarUrl"></open-data>
+				<image :src="user.avatar"></image>
 			</view>
 			<view class="pannel-text">
-				<open-data type="userNickName"></open-data>
+				<text>{{ user.name }}</text>
 				<view class="text-lg">
-					{{ self.content || 0 }}
+					{{ user.content || 0 }}
 				</view>
 			</view>
 		</view>
@@ -16,12 +16,12 @@
 		</view>
 		<view  v-if="pk" class="user-opponent bg-red">
 			<view class="user-avatar">
-				<open-data type="userAvatarUrl"></open-data>
+				<image :src="opponent.avatar"></image>
 			</view>
 			<view class="pannel-text text-right">
-				<open-data type="userNickName"></open-data>
+				<text>{{ opponent.name }}</text>
 				<view class="text-lg">
-					{{ self.content || 0 }}
+					{{ opponent.content || 0 }}
 				</view>
 			</view>
 		</view>
@@ -35,7 +35,7 @@
 				type: Boolean,
 				default: false
 			},
-			self: {
+			user: {
 				type: Object,
 				default: () => {}
 			},
@@ -47,11 +47,6 @@
 				type: Number,
 				default: 10
 			}
-		},
-		data() {
-			return {
-				
-			};
 		}
 	}
 </script>
@@ -80,6 +75,10 @@
 			border-radius: 72rpx;
 			border: 4px solid #fff;
 			overflow: hidden;
+			image {
+				width: 100%;
+				height: 100%;
+			}
 		}
 		.pannel-text {
 			font-size: 20rpx;
@@ -98,7 +97,7 @@
 			padding: 20rpx;
 			.timer-content {
 				height: 100%;
-				line-height: 60rpx;
+				line-height: 55rpx;
 				text-align: center;
 				color: #fff;
 				background: #5c039f;
