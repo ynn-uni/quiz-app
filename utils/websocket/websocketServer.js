@@ -34,6 +34,7 @@ function getOpponentInfo() {
 	const score = 1100
 	const level = 5
 	return JSON.stringify({
+		avatar,
 		name,
 		victory,
 		score,
