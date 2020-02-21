@@ -1,7 +1,7 @@
 <template>
 	<view class="subject">
 		<view class="title">
-			<text>{{ question.title }}</text>
+			<text class="padding-lr">{{ question.title }}</text>
 		</view>
 		<view class="options">
 			<view class="option-item margin-top" v-for="item in question.options" :key="item.id">
@@ -13,7 +13,10 @@
 					]"
 					@click="handleSelect(item.id)"
 				>
-					<text v-if="item.id === question.answer" :style="{ color: isRight === false ? '#F38B00' : '#fff' }" class="status cuIcon-check text-orange"></text>
+					<text
+						v-if="item.id === question.answer"
+						:style="{ color: isRight === false ? '#F38B00' : '#fff' }"
+						class="status cuIcon-check text-orange"></text>
 					<text v-if="item.id !== question.answer" class="status cuIcon-close"></text>
 					{{ item.content }}
 				</button>
@@ -74,7 +77,7 @@ export default {
 	},
 	methods: {
 		handleSelect(evt) {
-			if (this.selectOptionId != null) return
+			if (this.selectOptionId != null) return;
 			this.selectOptionId = evt;
 			const question = this.question;
 			if (this.autoNext) {
@@ -83,16 +86,16 @@ export default {
 		},
 		turnToNext(delay = 0) {
 			setTimeout(() => {
-				this.changeIndex()
+				this.changeIndex();
 				this.selectOptionId = null;
 			}, delay);
 		},
 		changeIndex() {
-			const length = this.list.length
+			const length = this.list.length;
 			if (this.currentIndex + 1 < length) {
 				this.currentIndex += 1;
 			} else {
-				this.currentIndex = 0
+				this.currentIndex = 0;
 			}
 		}
 	}
@@ -122,14 +125,14 @@ export default {
 			font-weight: bold;
 		}
 	}
-	
+
 	.action {
 		margin-top: 100rpx;
 		.next-btn {
 			margin: 64rpx 0;
 		}
 	}
-	
+
 	.cu-btn {
 		position: relative;
 		padding-top: 40rpx;
