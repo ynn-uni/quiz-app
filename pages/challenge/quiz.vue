@@ -1,31 +1,111 @@
 <template>
-	<view class="bg-linear">
-		<user-pannel :pk="true" :self="userSelf" :opponent="userOpponent" />
-		<subject :list="subjectList" :auto-next="true"></subject>
-	</view>
+  <view class="quiz">
+    <user-pannel ref="pannel" :pk="true" :time="countNum" />
+    <subject ref="subject" :list="questions" @select="onUserSelect"></subject>
+    <view class="score animation-reverse animation-slide-top" v-if="scoreAnim">
+      <text>+</text>
+      {{ curScore }}
+    </view>
+  </view>
 </template>
 
 <script>
 import UserPannel from '../../components/user-pannel.vue';
-import Subject from '../../components/subject.vue'
+import Subject from '../../components/subject.vue';
+import { mapGetters } from 'vuex';
 export default {
-	components: { UserPannel, Subject},
-	data() {
-		return {
-			userSelf: {
-				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-				name: '陈波波',
-				content: '0'
-			},
-			userOpponent: {
-				avatar: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-				name: '陈波波',
-				content: '0'
-			},
-			subjectList: this.subjectList
-		};
-	}
+  props: {
+    questions: {
+      type: Array,
+      default: () => []
+    }
+  },
+  components: { UserPannel, Subject },
+  data() {
+    return {
+      limitTime: 10,
+      subjectList: this.subjectList,
+      countNum: 10,
+      timerId: null,
+      scoreAnim: false,
+      curScore: 0
+    };
+  },
+  computed: {
+    ...mapGetters(['userScore', 'opponentScore'])
+  },
+  watch: {
+    timerId(val) {
+      console.log('id', val);
+    }
+  },
+  mounted() {
+    this.start();
+  },
+  methods: {
+    start() {
+      this.countDown();
+    },
+    onUserSelect(val) {
+      this.stopCountDown();
+      this.calcScore(val);
+      this.nextQuestion();
+    },
+    timeOut() {
+      this.stopCountDown();
+      this.calcScore(false);
+      this.nextQuestion();
+    },
+    calcScore(rightAnsower) {
+      const score = rightAnsower ? this.countNum * 10 : 0;
+      this.curScore = score;
+      this.scoreAnim = true;
+      this.$store.commit('challenge/increaseUserScore', score);
+      this.$store.dispatch('challenge/uploadSocre', score);
+    },
+
+    nextQuestion() {
+      setTimeout(() => {
+        this.$refs.subject.turnToNext();
+        this.reset();
+      }, 1500);
+    },
+    reset() {
+      this.countDown();
+      this.curScore = 0;
+      this.scoreAnim = false;
+      this.countNum = this.limitTime;
+    },
+    countDown() {
+      this.timerId = setInterval(() => {
+        if (this.countNum - 1 < 0) {
+          this.timeOut();
+          return;
+        }
+        this.countNum--;
+      }, 1000);
+    },
+    stopCountDown() {
+      clearInterval(this.timerId);
+    }
+  }
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.quiz {
+  .score {
+    position: fixed;
+    width: 100%;
+    top: 25%;
+    font-size: 60rpx;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: #fc0 0 0 6px;
+    text-align: center;
+    text {
+      vertical-align: 6rpx;
+    }
+  }
+}
+</style>

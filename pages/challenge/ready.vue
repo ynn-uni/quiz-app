@@ -4,16 +4,16 @@
 		<view class="left-side left">
 			<image class="name-bg left" src="../../static/images/ready-left-bg.png"></image>
 			<image class="victory-bg left bottom" src="../../static/images/ready-left-tag.png"></image>
-			<image class="avatar" :src="avatar"></image>
-			<text class="nickname">{{ nickname }}</text>
-			<text class="victory">{{ 0 }}连胜</text>
+			<image class="avatar" :src="user.avatar"></image>
+			<text class="nickname">{{ user.name }}</text>
+			<text class="victory">{{ user.victory }}连胜</text>
 		</view>
 		<view class="right-side right">
 			<image class="name-bg right" src="../../static/images/ready-right-bg.png"></image>
 			<image class="victory-bg right bottom" src="../../static/images/ready-right-tag.png"></image>
-			<image class="avatar" :src="avatar"></image>
-			<view class="nickname">{{ nickname }}</view>
-			<view class="victory">{{ 0 }}连胜</view>
+			<image class="avatar" :src="opponent.avatar"></image>
+			<view class="nickname">{{ opponent.name }}</view>
+			<view class="victory">{{ opponent.victory }}连胜</view>
 		</view>
 		<view class="vs-image"><image src="../../static/images/vs.png"></image></view>
 	</view>
@@ -21,10 +21,15 @@
 
 <script>
 export default {
-	computed: {
-		nickname: () => getApp().globalData.nickname,
-		avatar: () => getApp().globalData.avatar,
-		victory: () => getApp().globalData.victory
+	props: {
+		user: {
+			type: Object,
+			default: () => {}
+		},
+		opponent: {
+			type: Object,
+			default: () => {}
+		}
 	},
 	data() {
 		return {
@@ -43,6 +48,7 @@ export default {
 		text-align: center;
 		font-size: 54rpx;
 		font-weight: bold;
+		text-indent: 1em;
 		color: #fff;
 		opacity: 0.1;
 	}
