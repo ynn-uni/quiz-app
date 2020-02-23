@@ -2,12 +2,12 @@
 	<view class="user-pannel flex justify-between padding">
 		<view class="user-self bg-blue">
 			<view class="user-avatar">
-				<image :src="user.avatar"></image>
+				<image :src="userInfo.avatar"></image>
 			</view>
 			<view class="pannel-text">
-				<text>{{ user.name }}</text>
+				<text>{{ userInfo.name }}</text>
 				<view class="text-lg">
-					{{ user.score || 0 }}
+					{{ pk ? userScore : content }}
 				</view>
 			</view>
 		</view>
@@ -16,12 +16,12 @@
 		</view>
 		<view  v-if="pk" class="user-opponent bg-red">
 			<view class="user-avatar">
-				<image :src="opponent.avatar"></image>
+				<image :src="opponentInfo.avatar"></image>
 			</view>
 			<view class="pannel-text text-right">
-				<text>{{ opponent.name }}</text>
+				<text>{{ opponentInfo.name }}</text>
 				<view class="text-lg">
-					{{ opponent.score || 0 }}
+					{{ opponentScore }}
 				</view>
 			</view>
 		</view>
@@ -29,24 +29,29 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	export default {
 		props: {
 			pk: {
 				type: Boolean,
 				default: false
 			},
-			user: {
-				type: Object,
-				default: () => {}
-			},
-			opponent: {
-				type: Object,
-				default: () => {}
+			content: {
+				type: String,
+				default: ''
 			},
 			time: {
 				type: Number,
 				default: 10
 			}
+		},
+		computed: {
+			...mapGetters([
+				'userInfo',
+				'opponentInfo',
+				'userScore',
+				'opponentScore'
+			])
 		}
 	}
 </script>
