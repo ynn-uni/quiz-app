@@ -21,16 +21,16 @@
 
 <script>
 export default {
-	 props: {
-    user: {
-      type: Object,
-      default: () => {}
-    },
-    opponent: {
-      type: Object,
-      default: () => {}
-    }
-  },
+	props: {
+		user: {
+			type: Object,
+			default: () => {}
+		},
+		opponent: {
+			type: Object,
+			default: () => {}
+		}
+	},
 	data() {
 		return {
 			customBar: this.CustomBar

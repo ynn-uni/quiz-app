@@ -9,21 +9,23 @@
 			<text class="margin-left text-white">正在搜索匹配的对手</text>
 		</view>
 		<view class="user text-center">
-			<view class="avatar"><image :src="userInfo.avatar"></image></view>
+			<view class="avatar"><image :src="user.avatar"></image></view>
 			<view class="nickname">
-				<text>{{ userInfo.name }}</text>
+				<text>{{ user.name }}</text>
 			</view>
-			<view class="level">lv{{ userInfo.level }}</view>
+			<view class="level">lv{{ user.level }}</view>
 		</view>
 	</view>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
 	name: 'Arrange',
-	computed: {
-		...mapGetters(['userInfo'])
+	props: {
+		user: {
+			type: Object,
+			default: () => {}
+		}
 	}
 };
 </script>
