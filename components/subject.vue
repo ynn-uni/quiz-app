@@ -1,7 +1,7 @@
 <template>
   <view class="subject">
-    <view class="title">
-      <text class="padding-lr">{{ question.title }}</text>
+    <view class="title padding-lr">
+      <text>{{`(${currentIndex + 1}/${list.length})`}} {{ question.title }}</text>
     </view>
     <view class="options">
       <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
