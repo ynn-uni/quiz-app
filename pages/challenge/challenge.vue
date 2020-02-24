@@ -4,21 +4,21 @@
       <block slot="backText">返回</block>
       <block slot="content">擂台挑战</block>
     </cu-custom>
-    <arrange v-if="isMatched" :user="userInfo"></arrange>
+    <matching v-if="isMatched" :user="userInfo"></matching>
     <ready v-if="isReady" :user="userInfo" :opponent="opponentInfo"></ready>
     <quiz v-if="isQuiz" :questions="qusetionList" @score="postSocre"></quiz>
   </view>
 </template>
 
 <script>
-import Arrange from './arrange';
+import Matching from './matching';
 import Ready from './ready';
 import Quiz from './quiz.vue';
 import WebsocketUtils from '@/utils/websocket';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { getQuestions } from '../../apis/index';
 export default {
-  components: { Arrange, Ready, Quiz },
+  components: { Matching, Ready, Quiz },
   data() {
     return {
       qusetionList: []
