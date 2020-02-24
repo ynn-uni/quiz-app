@@ -23,7 +23,7 @@
         </button>
       </view>
     </view>
-    <view v-if="!autoNext && selectOptionId" class="action">
+    <view v-if="!pk && selectOptionId" class="action">
       <view class="explain text-center">
         <text class="text-white text-lg">解：{{ question.explain }}</text>
       </view>
@@ -42,6 +42,10 @@ export default {
       required: true,
       type: Array,
       default: () => []
+    },
+    pk: {
+      type: Boolean,
+      default: false
     },
     autoNext: {
       type: Boolean,

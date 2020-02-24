@@ -1,7 +1,7 @@
 <template>
   <view class="quiz">
     <user-pannel ref="pannel" :pk="true" :time="countNum" />
-    <subject ref="subject" :list="questions" @select="onUserSelect"></subject>
+    <subject ref="subject" :pk="true" :list="questions" @select="onUserSelect"></subject>
     <view class="score animation-reverse animation-slide-top" v-if="scoreAnim">
       <text>+</text>
       {{ curScore }}
