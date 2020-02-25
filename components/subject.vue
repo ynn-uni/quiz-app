@@ -1,7 +1,7 @@
 <template>
   <view class="subject">
-    <view class="title">
-      <text class="padding-lr">{{ question.title }}</text>
+    <view class="title padding-lr">
+      <text>{{`(${currentIndex + 1}/${list.length})`}} {{ question.title }}</text>
     </view>
     <view class="options">
       <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
@@ -23,7 +23,7 @@
         </button>
       </view>
     </view>
-    <view v-if="!autoNext && selectOptionId" class="action">
+    <view v-if="!pk && selectOptionId" class="action">
       <view class="explain text-center">
         <text class="text-white text-lg">解：{{ question.explain }}</text>
       </view>
@@ -42,6 +42,10 @@ export default {
       required: true,
       type: Array,
       default: () => []
+    },
+    pk: {
+      type: Boolean,
+      default: false
     },
     autoNext: {
       type: Boolean,
@@ -97,7 +101,8 @@ export default {
       if (this.currentIndex + 1 < length) {
         this.currentIndex += 1;
       } else {
-        this.currentIndex = 0;
+        // 所有问题都答完
+        this.$emit('finish');
       }
     }
   }

@@ -1,17 +1,20 @@
 export default {
   userInfo: state => {
-    return state.user.userInfo
+    return state.user.userInfo;
   },
   opponentInfo: state => {
-    return state.challenge.opponentInfo
+    return state.challenge.opponentInfo;
   },
   socketInstance: state => {
-    return state.challenge.socketInstance
+    return state.challenge.socketInstance;
   },
   userScore: state => {
-    return state.challenge.userScore
+    return state.challenge.userScore;
   },
   opponentScore: state => {
-    return state.challenge.opponentScore
+    return state.challenge.opponentScore;
+  },
+  settlementInfo: state => {
+    return state.challenge.settlementInfo;
   }
-}
+};

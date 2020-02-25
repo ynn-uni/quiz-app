@@ -1,7 +1,13 @@
 <template>
   <view class="quiz">
     <user-pannel ref="pannel" :pk="true" :time="countNum" />
-    <subject ref="subject" :list="questions" @select="onUserSelect"></subject>
+    <subject
+      ref="subject"
+      :pk="true"
+      :list="questions"
+      @select="onUserSelect"
+      @finish="handleFinish"
+    ></subject>
     <view class="score animation-reverse animation-slide-top" v-if="scoreAnim">
       <text>+</text>
       {{ curScore }}
@@ -28,7 +34,8 @@ export default {
       countNum: 10,
       timerId: null,
       scoreAnim: false,
-      curScore: 0
+      curScore: 0,
+      finished: false
     };
   },
   computed: {
@@ -49,18 +56,18 @@ export default {
     onUserSelect(val) {
       this.stopCountDown();
       this.calcScore(val);
-      this.nextQuestion();
+      !this.finished && this.nextQuestion();
     },
     timeOut() {
       this.stopCountDown();
       this.calcScore(false);
-      this.nextQuestion();
+      !this.finished && this.nextQuestion();
     },
     calcScore(rightAnsower) {
       const score = rightAnsower ? this.countNum * 10 : 0;
       this.curScore = score;
       this.scoreAnim = true;
-      this.$store.commit('challenge/increaseUserScore', score);
+      this.$store.commit('challenge/updateUserScore', score);
       this.$store.dispatch('challenge/uploadSocre', score);
     },
 
@@ -87,6 +94,11 @@ export default {
     },
     stopCountDown() {
       clearInterval(this.timerId);
+    },
+    handleFinish() {
+      this.stopCountDown();
+      this.finished = true;
+      this.$store.dispatch('challenge/finishQuiz');
     }
   }
 };

@@ -118,7 +118,7 @@ export function getQuestions() {
       answer: 'D',
       explain: ''
     }
-  ]
+  ];
 }
 
 export function login() {
@@ -128,5 +128,5 @@ export function login() {
     level: 4,
     victory: 2,
     credit: 1000 // 积分
-  }
+  };
 }
