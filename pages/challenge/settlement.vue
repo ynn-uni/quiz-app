@@ -47,7 +47,7 @@
     </view>
     <view class="action">
       <button class="cu-btn round again bg-orange" @click="reChallenge">继续挑战</button>
-      <button class="cu-btn round review">回顾本局</button>
+      <button class="cu-btn round review" @click="handleReview">回顾本局</button>
     </view>
   </view>
 </template>
@@ -83,6 +83,11 @@ export default {
     reChallenge() {
       uni.redirectTo({
         url: '/pages/challenge/challenge'
+      });
+    },
+    handleReview() {
+      uni.redirectTo({
+        url: '/pages/review/review'
       });
     }
   }
