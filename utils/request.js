@@ -1,5 +1,5 @@
 // TODO store 中存储获取token
-const baseUrl = 'http://47.107.151.209:9801'
+const baseUrl = 'http://47.107.151.209:9801';
 
 export async function request(url = '', method = 'GET', data = {}) {
   return uni.request({
@@ -9,13 +9,13 @@ export async function request(url = '', method = 'GET', data = {}) {
       token: ''
     },
     method
-  })
+  });
 }
 
 export async function postAction(url, data) {
-  return request(url, 'POST', data)
+  return request(url, 'POST', data);
 }
 
 export async function getAction(url, data) {
-  return request(url, 'GET', data)
+  return request(url, 'GET', data);
 }

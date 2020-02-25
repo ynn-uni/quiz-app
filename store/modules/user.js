@@ -1,18 +1,18 @@
-import { login as loginApi } from '../../apis'
+import { login as loginApi } from '../../apis';
 export default {
   namespaced: true,
   state: {
-    userInfo: null,
+    userInfo: null
   },
   mutations: {
     updateUserInfo(state, userInfo) {
-      state.userInfo = userInfo
+      state.userInfo = userInfo;
     }
   },
   actions: {
     login({ commit }) {
-      const userInfo = loginApi()
-      commit('updateUserInfo', userInfo)
+      const userInfo = loginApi();
+      commit('updateUserInfo', userInfo);
     }
   }
-}
+};
