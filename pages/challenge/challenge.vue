@@ -6,7 +6,8 @@
     </cu-custom>
     <matching v-if="isMatched" :user="userInfo"></matching>
     <ready v-if="isReady" :user="userInfo" :opponent="opponentInfo"></ready>
-    <quiz v-if="isQuiz" :questions="qusetionList" @score="postSocre"></quiz>
+    <quiz v-if="isQuiz" :questions="qusetionList"></quiz>
+    <settlement v-if="isFinished"></settlement>
   </view>
 </template>
 
@@ -14,18 +15,19 @@
 import Matching from './matching';
 import Ready from './ready';
 import Quiz from './quiz.vue';
+import Settlement from './settlement';
 import WebsocketUtils from '@/utils/websocket';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { getQuestions } from '../../apis/index';
 export default {
-  components: { Matching, Ready, Quiz },
+  components: { Matching, Ready, Quiz, Settlement },
   data() {
     return {
       qusetionList: []
     };
   },
   computed: {
-    ...mapState('challenge', ['isMatched', 'isReady', 'isQuiz']),
+    ...mapState('challenge', ['isMatched', 'isReady', 'isQuiz', 'isFinished']),
     ...mapGetters(['userInfo', 'opponentInfo', 'socketInstance'])
   },
   watch: {

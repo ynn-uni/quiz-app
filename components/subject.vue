@@ -101,7 +101,8 @@ export default {
       if (this.currentIndex + 1 < length) {
         this.currentIndex += 1;
       } else {
-        this.currentIndex = 0;
+        // 所有问题都答完
+        this.$emit('finish');
       }
     }
   }
