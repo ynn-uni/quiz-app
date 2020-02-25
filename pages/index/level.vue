@@ -66,6 +66,7 @@ $bg-label: #7f41c1;
 			padding: 0 70rpx;
 			font-size: 36rpx;
 			font-weight: 500;
+			z-index: 2;
 			.label {
 				margin-top: 12rpx;
 				font-size: 28rpx;
