@@ -5,6 +5,9 @@ export default {
   opponentInfo: state => {
     return state.challenge.opponentInfo;
   },
+  questionList: state => {
+    return state.challenge.questionList;
+  },
   socketInstance: state => {
     return state.challenge.socketInstance;
   },
