@@ -6,7 +6,7 @@
     </cu-custom>
     <matching v-if="isDisplay('MATCH')" :user="userInfo"></matching>
     <ready v-if="isDisplay('READY')" :user="userInfo" :opponent="opponentInfo"></ready>
-    <quiz v-if="isDisplay('QUIZ') && questionList.length" :questions="questionList"></quiz>
+    <quiz v-if="isDisplay('QUIZ') && questionList.length" ref="quiz" :questions="questionList"></quiz>
     <settlement v-if="isDisplay('OVER')"></settlement>
   </view>
 </template>
@@ -83,6 +83,7 @@ export default {
           break;
         case 'SCORE':
           commit('challenge/updateOpponentScore', data.score);
+          this.$refs.quiz.nextQuestion();
           break;
         case 'OVER':
           this.statusIndex = 4;
