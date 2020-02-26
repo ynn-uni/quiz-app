@@ -53,6 +53,9 @@ class WebSocketUtils {
     try {
       this.socketTask = uni.connectSocket({
         url,
+        header: {
+          Authorization: 'token'
+        },
         complete: () => {
           // console.warn('websocket open')
         }
@@ -66,7 +69,6 @@ class WebSocketUtils {
 
   initEventHandle() {
     this.socketTask.onOpen(evt => {
-      this.repeatTimes = 0;
       this.onopen(evt);
       this.heartCheck();
     });
@@ -87,8 +89,13 @@ class WebSocketUtils {
     });
   }
 
-  send(object) {
-    this.socketTask.send(object);
+  send(data) {
+    if (typeof data !== 'string') {
+      data = JSON.stringify(data);
+    }
+    this.socketTask.send({
+      data: data
+    });
   }
 
   heartCheck() {
@@ -100,7 +107,8 @@ class WebSocketUtils {
     const { pingTimeout, pongTimeout, pingMsg } = this._options;
     if (this.forbidReconnect) return;
     this.pingTimeoutId = setTimeout(() => {
-      this.socketTask.send({
+      this.send({
+        operate: 'PING',
         data: pingMsg
       });
       console.log('send -> ', pingMsg);

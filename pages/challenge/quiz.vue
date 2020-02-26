@@ -3,7 +3,7 @@
     <user-pannel ref="pannel" :pk="true" :time="countNum" />
     <subject
       ref="subject"
-      :pk="true"
+      type="pk"
       :list="questions"
       @select="onUserSelect"
       @finish="handleFinish"
@@ -56,12 +56,12 @@ export default {
     onUserSelect(val) {
       this.stopCountDown();
       this.calcScore(val);
-      !this.finished && this.nextQuestion();
+      this.nextQuestion();
     },
     timeOut() {
       this.stopCountDown();
       this.calcScore(false);
-      !this.finished && this.nextQuestion();
+      this.nextQuestion();
     },
     calcScore(rightAnsower) {
       const score = rightAnsower ? this.countNum * 10 : 0;
@@ -70,8 +70,8 @@ export default {
       this.$store.commit('challenge/updateUserScore', score);
       this.$store.dispatch('challenge/uploadSocre', score);
     },
-
     nextQuestion() {
+      if (this.finished) return;
       setTimeout(() => {
         this.$refs.subject.turnToNext();
         this.reset();

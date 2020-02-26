@@ -5,6 +5,7 @@ export default {
   state: {
     socketInstance: null,
     opponentInfo: {},
+    questionList: null,
     userScore: 0,
     opponentScore: 0,
     settlementInfo: {},
@@ -20,11 +21,17 @@ export default {
     updateOpponentInfo(state, info) {
       state.opponentInfo = info;
     },
+    updateRoomId(state, id) {
+      state.roomId = id;
+    },
+    updateQuestionList(state, list = []) {
+      state.questionList = list;
+    },
     updateUserScore(state, score) {
       state.userScore += score;
     },
     updateOpponentScore(state, score) {
-      state.opponentScore = score;
+      state.opponentScore += score;
     },
     changeMatchStatus(state, status) {
       state.isMatched = status;
@@ -47,7 +54,8 @@ export default {
       const { commit } = context;
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
-          url: 'ws://mahy-mac.local:8888/'
+          // url: 'ws://mahy-mac.local:8888/'
+          url: 'ws://192.168.1.65:9502/Battle'
         });
         instance.onmessage = evt => {
           listenMessage(context, evt);
@@ -66,14 +74,23 @@ export default {
       commit('changeFinishStatus', false);
     },
     uploadSocre({ state }, score) {
-      state.socketInstance.send({ data: `score#${score}` });
+      state.socketInstance.send({
+        operate: 'SCORE',
+        data: {
+          room: state.roomId,
+          score
+        }
+      });
     },
     finishQuiz({ state, commit }) {
       commit('changeQuizStatus', false);
       commit('changeFinishStatus', true);
       commit('updateUserScore', 0);
       commit('updateOpponentScore', 0);
-      state.socketInstance.send({ data: 'finish' });
+      state.socketInstance.send({
+        operate: 'OVER',
+        data: 'OVER'
+      });
     }
   }
 };
@@ -81,23 +98,30 @@ export default {
 function listenMessage(context, evt) {
   const { commit } = context;
   console.log('----', evt);
-  const [sign, message] = evt.data.split('#');
-
-  if (!message) return;
-  if (sign === 'opponent') {
-    const opponent = JSON.parse(message);
-    commit('updateOpponentInfo', opponent);
+  const { operate, data } = JSON.parse(evt.data);
+  if (operate === 'MATCH') {
+    const { room, rival, subjects } = data;
+    const opponentInfo = {
+      name: rival.nickname,
+      avatar: rival.portrait,
+      score: rival.score,
+      victory: rival.streak,
+      level: rival.level
+    };
+    commit('updateRoomId', room);
+    commit('updateOpponentInfo', opponentInfo);
+    commit('updateQuestionList', subjects);
     commit('changeMatchStatus', false);
     commit('changeReadyStatus', true);
     setTimeout(() => {
       commit('changeReadyStatus', false);
     }, 3000);
+    console.log(context.state);
   }
-  if (sign === 'score') {
-    commit('updateOpponentScore', message);
+  if (operate === 'SCORE') {
+    commit('updateOpponentScore', data.score);
   }
-  if (sign === 'settlement') {
-    const info = JSON.parse(message);
-    commit('updateSettlementInfo', info);
+  if (operate === 'OVER') {
+    commit('updateSettlementInfo', data);
   }
 }

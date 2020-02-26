@@ -6,7 +6,7 @@
     </cu-custom>
     <matching v-if="isMatched" :user="userInfo"></matching>
     <ready v-if="isReady" :user="userInfo" :opponent="opponentInfo"></ready>
-    <quiz v-if="isQuiz" :questions="qusetionList"></quiz>
+    <quiz v-if="isQuiz && questionList.length" :questions="questionList"></quiz>
     <settlement v-if="isFinished"></settlement>
   </view>
 </template>
@@ -18,17 +18,19 @@ import Quiz from './quiz.vue';
 import Settlement from './settlement';
 import WebsocketUtils from '@/utils/websocket';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-import { getQuestions } from '../../apis/index';
 export default {
   components: { Matching, Ready, Quiz, Settlement },
   data() {
-    return {
-      qusetionList: []
-    };
+    return {};
   },
   computed: {
     ...mapState('challenge', ['isMatched', 'isReady', 'isQuiz', 'isFinished']),
-    ...mapGetters(['userInfo', 'opponentInfo', 'socketInstance'])
+    ...mapGetters([
+      'questionList',
+      'userInfo',
+      'opponentInfo',
+      'socketInstance'
+    ])
   },
   watch: {
     isReady(val) {
@@ -38,13 +40,18 @@ export default {
     }
   },
   onShow: function(options) {
-    this.qusetionList = getQuestions();
     this.initWebsocket().then(instance => {
-      instance.send({ data: 'matching' });
+      instance.send({
+        operate: 'MATCH',
+        data: 'matching'
+      });
     });
   },
   onUnload: function() {
     this.closeWebsocket();
+  },
+  mounted() {
+    console.log(this.questionList);
   },
   methods: {
     ...mapMutations('challenge', ['changeQuizStatus']),
