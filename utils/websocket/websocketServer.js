@@ -116,18 +116,16 @@ function receiveScore(ws) {
 }
 
 function settlementQuiz(ws) {
-  const userScore = 860;
-  const opponentScore = 700;
-  const credit = 10;
-  const exp = 10;
+  const socre = 10;
+  const experience = 11;
+  const streak = 6;
   ws.send(
     formatMessage({
       operate: 'OVER',
       data: {
-        userScore,
-        opponentScore,
-        credit,
-        exp
+        socre,
+        experience,
+        streak
       }
     })
   );
