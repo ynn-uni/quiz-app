@@ -87,15 +87,32 @@ export default {
             this.$store.commit('user/updateToken', res.data.token);
             // console.log(res);
             getUserInfoApi().then(res => {
-              // console.log(res);
+              console.log(res);
               // console.log(this.$store);
-              const { nickname, portrait, level, streak, score } = res.data;
+              //
+              const {
+                battle,
+                defeat,
+                id,
+                level,
+                nickname,
+                portrait,
+                score,
+                sex,
+                streak,
+                train
+              } = res.data;
               const userinfo = {
                 name: nickname,
                 avatar: portrait,
                 level: level,
-                victory: streak,
-                credit: score // 积分
+                victory: streak, //胜场
+                credit: score, // 积分
+                battle,
+                defeat, //败场
+                id,
+                sex,
+                train
               };
               this.$store.commit('user/updateUserInfo', userinfo);
             });

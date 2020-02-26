@@ -1,40 +1,83 @@
 <template>
 	<view class="past" :style="{'height':height+'px'}">
 		<view class="title flex justify-between align-center">
-			<view class="back">
+			<view class="back" @click="beforeIssue" >
 				<text class="cuIcon-back"></text>
 				上一期
 			</view>
+		
 			<view class="text">
-				第1期（2020年2月9日）
+				{{date}}
 			</view>
-			<view class="next">
+			<view class="next" @click="nextIssue" v-if="issue<0">
+				下一期
+				<text class="cuIcon-right"></text>
+			</view>
+			<view class="next text-gray" v-if="issue==0">
 				下一期
 				<text class="cuIcon-right"></text>
 			</view>
 		</view>
-		<view class="list" :style="{'height':(height-23)+'px'}">
-			<view class="item flex align-center justify-center padding-tb-xs" v-for="(item,index) in 10" :key="index">
-				<image class="margin-right-lg" src="../../static/images/rank.png" mode=""></image>
-				陈xx
-			</view>
+		<view v-if="!lotteryList" class="text-center flex align-center justify-center" :style="{'height':(height-23)+'px'}">
+				未获取到该期开奖数据
 		</view>
+		<view class="list" :style="{'height':(height-23)+'px'}">
+			<view class="item flex align-center justify-center padding-tb-xs" v-for="(item,index) in lotteryList" :key="index">
+				<image class="margin-right-lg" :src="item.user.portrait" mode=""></image>
+				{{item.user.nickname}}
+			</view>
+			
+		</view>
+		
 	</view>
 </template>
 
 <script>
+import { getLotteryList} from "../../apis";
 	export default {
 		data() {
 			return {
-				
+				issue:0,
+				lotteryList:[],
+				date:''
 			}
 		},
 		props:{
 			height:String
 		},
-		
+		mounted(){
+		this.getDataList()
+		},
 		methods: {
-			
+			getDate(issue){
+					var day1 = new Date();
+					var year=day1.getFullYear()
+					var month=day1.getMonth()+1
+					month=month<10?'0'+month:month
+					var day=day1.getDate()-1+issue
+					this.date=year+'-'+month+'-'+day
+					return year+'-'+month+'-'+day
+			},
+			getDataList(){
+					var date=this.getDate(this.issue)
+					getLotteryList({date:date}).then((res)=>{
+							console.log(res)
+							if(res.data.length>0){
+								this.lotteryList=res.data
+							}else{
+								this.lotteryList=null
+							}
+							
+						})
+			},
+			beforeIssue(){
+				this.issue--
+				this.getDataList();
+			},
+			nextIssue(){
+				this.issue++
+				this.getDataList();
+			}
 		}
 	}
 </script>
@@ -54,6 +97,12 @@
 				line-height:34rpx;
 				text{
 					margin: 0 20rpx;
+				}
+			}
+			.text-gray{
+				color: gray;
+				text{
+					color: gray;
 				}
 			}
 			.text{

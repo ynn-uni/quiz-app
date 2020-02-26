@@ -23,7 +23,7 @@
 					<view class="no_title text-center">
 						奖品规则
 					</view>
-					1、每24小时在排名前20名中随机抽取10名获奖者，免费赠送一只口罩。
+					1、每24小时在排名前200名中随机抽取20名获奖者，免费赠送十只口罩。
 					<br>
 					2、凑齐10只口罩可联系客服兑换，寄送（不满十只也可兑换，邮费自理。
 					<br>
@@ -40,8 +40,8 @@
 					</view>
 					<view class="data" >
 						<NoData v-if="status=='01'||status=='02'" :height="height"></NoData>
-						<MyReward v-if="status=='1'" :height="height"></MyReward>
-						<PastReward v-if="status=='2'" :height="height"></PastReward>
+						<MyReward v-if="status=='1'" :height="height" v-on:ListenChild="ShowChild"></MyReward>
+						<PastReward v-if="status=='2'" :height="height" v-on:ListenChild="ShowChild"></PastReward>
 					</view>
 				</view>
 			
@@ -54,11 +54,12 @@
 	import NoData from './nodata.vue'
 	import MyReward from './my_reward.vue'
 	import PastReward from './past_reward.vue'
+
 	export default {
 		data() {
 			return {
 				// nodata:true,
-				status:'01',//0没有数据 1查看我的获奖记录 2 查看往期记录
+				status:'1',//0没有数据 1查看我的获奖记录 2 查看往期记录
 				height:'0'
 			}
 		},
@@ -82,11 +83,16 @@
 			  that.height=height-(data.top-top)
 			  // console.log(that.height) 
 			 }).exec()
+			
+				
 		},
 		methods: {
 			changeStatus(stauts){
 				this.status=stauts
-			}
+			},
+			 ShowChild: function(data) {
+				this.status=data
+			},
 		}
 	}
 </script>

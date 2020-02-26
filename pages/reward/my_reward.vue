@@ -1,17 +1,17 @@
 <template>
 	<view class="my_reward" :style="{'height':height+'px'}">
-		<view class="item flex align-center padding-tb-sm" v-for="(item,index) in 10" :key="index">
+		<view class="item flex align-center padding-tb-sm" v-for="(item,index) in lotteryUserList" :key="index">
 			<view class="data">
-				{{index+1}}、2020年2月10日
+				{{index+1}}、{{item.date}}
 			</view>
 			<image src="../../static/images/reword_kouzhao.png" mode=""></image>
 			<view class="num">
-				x1
+				x10
 			</view>
 			<!-- <view class="btn">
 				兑换完成
 			</view> -->
-			<button class="btn active" @tap="showModal" data-target="DialogModal1">点击兑换</button>
+			<!-- <button class="btn active" @tap="showModal" data-target="DialogModal1">点击兑换</button> -->
 			
 		</view>
 		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
@@ -36,16 +36,28 @@
 </template>
 
 <script>
+import { getLotteryUserList } from "../../apis";
 	export default {
 		data() {
 			return {
 				modalName: null,
+				lotteryUserList:[]
 			}
 		},
 		props:{
 			height:String
 		},
-		
+		mounted() {
+			getLotteryUserList().then((res)=>{
+				console.log(res)
+				
+				if(res.data.length>0){
+					this.lotteryUserList=res.data
+				}else{
+					this.$emit('ListenChild', '01');
+				}
+			})
+  	},
 		methods: {
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target

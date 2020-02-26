@@ -7,34 +7,34 @@
 		<view class="rank flex flex-direction align-center">
 			<image class="ran_img" src="../../static/images/rank.png" mode=""></image>
 			<view class="rank_list  bg-white flex flex-direction align-center" >
-				<view class="rank_tab flex align-center justify-center padding-tb bg-white">
+				<!-- <view class="rank_tab flex align-center justify-center padding-tb bg-white">
 					<view class="tab" :class="changerank==0?'active':'' " @click="changeRank(0)">
-						世界排行
+						今日排行
 					</view>
 					<view class="line"></view>
 					<view class="tab" :class="changerank==1?'active':''" @click="changeRank(1)">
 						好友排行
 					</view>
-				</view>
+				</view> -->
 				<view class="rank_itemlist" :style="{'height':height+'px'}">
-					<view class="rank_item padding-sm flex align-center justify-between" v-for="(item,index) in 20" :key="index">
+					<view class="rank_item padding-sm flex align-center justify-between" v-for="(item,index) in ranking" :key="index">
 						<view class="left flex align-center">
-							<view class="num  margin-right-xs">
+							<view class="num ">
 								{{index+1}}
 							</view>
-							<image class="rank_headimg margin-lr-sm" src="../../static/images/rank.png" mode=""></image>
+							<image class="rank_headimg margin-lr-sm" :src="item.user.portrait" mode=""></image>
 							<view class="info flex flex-direction align-center">
 								<view class="name">
-									陈饽饽
+									{{item.user.nickname}}
 								</view>
 								<view class="my_class text-center">
-									lv4
+									lv{{item.user.level}}
 								</view>
 							</view>
 						</view>
 						<view class="right flex align-center">
 							<image src="../../static/images/gem.png" mode=""></image>
-							3567
+							{{item.sum}}
 						</view>
 						
 					</view>
@@ -42,37 +42,43 @@
 				
 			</view>
 		</view>
-		<view class="own text-center">
+		<!-- <view class="own text-center">
 			当前我的排名343437
-		</view>
+		</view> -->
 	</view>
 </template>
 
 <script>
+import { getScoreRankingList } from '../../apis';
 	export default {
 		data() {
 			return {
 				changerank:0,
-				height:'0'
+				height:'0',
+				ranking:[]
 			}
 		},
-		onShow() {
-			var that=this
+		onLoad() {
+			//适应排行榜列表显示高度
+			 var that=this
 			 let info = uni.createSelectorQuery();
 			 var height=0;
 			 var top=0;
 			 info.select(".rank").boundingClientRect(function(data) { //data - 各种参数
-			 　console.log(data.height,data.top) 
+			 　
 				height=data.height
 				top=data.top
 			 }).exec()
 			 info.select(".rank_itemlist").boundingClientRect(function(data) { //data - 各种参数
-			 　console.log(height-(data.top-top),data.top) 
+			 　
 			  that.height=height-(data.top-top)
-			  console.log(that.height) 
+			 
 			 }).exec()
-			
-            
+
+			 getScoreRankingList().then((res)=>{
+				 console.log(res)
+				 this.ranking=res.data;
+			 })     
 		},
 		methods: {
 			changeRank(status){
@@ -126,7 +132,7 @@
 				overflow-y: scroll;
 				.rank_item{
 					width: 640rpx;
-					padding-left: 56rpx;
+					// padding-left: 36rpx;
 					border-bottom:2rpx solid rgba(245,245,245,1);
 					.left{
 						.num{
@@ -139,8 +145,10 @@
 						.rank_headimg{
 							width: 80rpx;
 							height: 80rpx;
+							border-radius: 50%;
 						}
 						.info{
+							width: 200rpx;
 							.name{
 								font-size:24rpx;
 								font-weight:500;

@@ -8,13 +8,13 @@
 		</view>
 		<view class="progress-wrapper flex justify-center align-center">
 			<progress class="progress" :percent="percent" border-radius="7px" stroke-width="7px" background-color="#3d0273" active-color="#ffce24" :active="true" />
-			<view class="progress-label">lv{{ level }}</view>
+			<view class="progress-label">lv{{ user.level }}</view>
 		</view>
 		<view class="sorce flex justify-center align-center">
 			<image src="../../../static/images/gem.png" mode=""></image>
 			积分
 			<view class="num">
-				{{sorce}}分
+				{{user.credit}}分
 			</view>
 		</view>
 		<view class="info">
@@ -24,7 +24,7 @@
 						用户编号：
 					</view>
 					<view class="val">
-						54364654
+						{{user.id}}
 					</view>
 				</view>
 				<view class="right flex justify-center align-center">
@@ -50,7 +50,7 @@
 						总场次：
 					</view>
 					<view class="val">
-						24场
+						{{user.battle}}场
 					</view>
 				</view>
 			</view>
@@ -68,7 +68,7 @@
 						胜场：
 					</view>
 					<view class="val">
-						12
+						{{user.victory}}
 					</view>
 				</view>
 			</view>
@@ -77,15 +77,42 @@
 </template>
 
 <script>
+
 	export default {
 		data() {
 			return {
 				percent: '40',
 				level: 4,
-				sorce:'2000'
+				sorce:'2000',
+				user:{}
 			}
 		},
-		
+		mounted(){
+			const {
+				name,
+				avatar,
+				level,
+				victory,
+				credit,
+				battle,
+        defeat, //败场
+        id,
+        sex,
+        train }=this.$store.state.user.userInfo
+			this.user={
+					name,
+					avatar,
+					level,
+					victory,
+					credit,
+					battle,
+          defeat, //败场
+        	id,
+          sex,
+          train
+			}
+			console.log(this.user);
+		},
 		methods: {
 			
 		}
