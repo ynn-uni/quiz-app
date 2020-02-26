@@ -67,7 +67,7 @@ export default {
       const score = rightAnsower ? this.countNum * 10 : 0;
       this.curScore = score;
       this.scoreAnim = true;
-      this.$store.commit('challenge/updateUserScore', score);
+      this.$store.commit('challenge/updateUserScore', this.userScore + score);
       this.$store.dispatch('challenge/uploadSocre', score);
     },
     nextQuestion() {
