@@ -21,9 +21,6 @@ export default {
     updateOpponentInfo(state, info) {
       state.opponentInfo = info;
     },
-    updateRoomId(state, id) {
-      state.roomId = id;
-    },
     updateQuestionList(state, list = []) {
       state.questionList = list;
     },
@@ -80,7 +77,6 @@ export default {
       state.socketInstance.send({
         operate: 'SCORE',
         data: {
-          room: state.roomId,
           score
         }
       });
@@ -103,7 +99,7 @@ function listenMessage(context, evt) {
   console.log('----', evt);
   const { operate, data } = JSON.parse(evt.data);
   if (operate === 'MATCH') {
-    const { room, rival, subjects } = data;
+    const { rival, subjects } = data;
     const opponentInfo = {
       name: rival.nickname,
       avatar: rival.portrait,
@@ -111,7 +107,6 @@ function listenMessage(context, evt) {
       victory: rival.streak,
       level: rival.level
     };
-    commit('updateRoomId', room);
     commit('updateOpponentInfo', opponentInfo);
     commit('updateQuestionList', subjects);
     commit('changeMatchStatus', false);
