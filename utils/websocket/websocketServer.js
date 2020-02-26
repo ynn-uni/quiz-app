@@ -73,13 +73,13 @@ function getOpponentInfo() {
   const victory = 1;
   const score = 1100;
   const level = 5;
-  return JSON.stringify({
+  return {
     portrait: avatar,
     nickname: name,
     streak: victory,
     score,
     level
-  });
+  };
 }
 
 function receiveScore(ws, message) {
@@ -98,12 +98,15 @@ function settlementQuiz(ws) {
   const credit = 10;
   const exp = 10;
   ws.send(
-    `settlement#${JSON.stringify({
-      userScore,
-      opponentScore,
-      credit,
-      exp
-    })}`
+    formatMessage({
+      operate: 'OVER',
+      data: {
+        userScore,
+        opponentScore,
+        credit,
+        exp
+      }
+    })
   );
 }
 
