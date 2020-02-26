@@ -25,10 +25,10 @@ export default {
       state.questionList = list;
     },
     updateUserScore(state, score) {
-      state.userScore += score;
+      state.userScore = score;
     },
     updateOpponentScore(state, score) {
-      state.opponentScore += score;
+      state.opponentScore = score;
     },
     changeMatchStatus(state, status) {
       state.isMatched = status;
