@@ -8,11 +8,7 @@ export default {
     questionList: null,
     userScore: 0,
     opponentScore: 0,
-    settlementInfo: {},
-    isMatched: true,
-    isReady: false,
-    isQuiz: false,
-    isFinished: false
+    settlementInfo: {}
   },
   mutations: {
     updateSocketInstance(state, task) {
@@ -30,18 +26,6 @@ export default {
     updateOpponentScore(state, score) {
       state.opponentScore = score;
     },
-    changeMatchStatus(state, status) {
-      state.isMatched = status;
-    },
-    changeReadyStatus(state, status) {
-      state.isReady = status;
-    },
-    changeQuizStatus(state, status) {
-      state.isQuiz = status;
-    },
-    changeFinishStatus(state, status) {
-      state.isFinished = status;
-    },
     updateSettlementInfo(state, info) {
       state.settlementInfo = info;
     }
@@ -51,22 +35,21 @@ export default {
       const { commit, rootState } = context;
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
-          // url: 'ws://mahy-mac.local:8888/'
+          // url: 'ws://mahy-mac.local:8888/',
           url: 'ws://192.168.1.65:9502/Battle',
           header: {
             Authorization: rootState.user.token
           }
         });
-        resolve(instance);
+        // 每次重建连接时初始化store中的分值
+        commit('updateUserScore', 0);
+        commit('updateOpponentScore', 0);
         commit('updateSocketInstance', instance);
+        resolve(instance);
       });
     },
     closeWebsocket({ state, commit }) {
       state.socketInstance.close();
-      commit('changeMatchStatus', true);
-      commit('changeReadyStatus', false);
-      commit('changeQuizStatus', false);
-      commit('changeFinishStatus', false);
     },
     uploadSocre({ state }, score) {
       state.socketInstance.send({
@@ -77,10 +60,6 @@ export default {
       });
     },
     finishQuiz({ state, commit }) {
-      commit('changeQuizStatus', false);
-      commit('changeFinishStatus', true);
-      commit('updateUserScore', 0);
-      commit('updateOpponentScore', 0);
       state.socketInstance.send({
         operate: 'OVER',
         data: 'OVER'

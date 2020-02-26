@@ -6,23 +6,37 @@
         <image class="avatar" :src="userInfo.avatar" />
         <text class="nickname">{{ userInfo.name }}</text>
         <text class="score">
-          190
+          {{ userScore }}
           <text class="label">分</text>
         </text>
         <image class="victory" src="../../static/images/settlement-victory.png" />
-        <text class="victory-text">100连胜</text>
+        <text class="victory-text">{{ settlementInfo.streak }}连胜</text>
       </view>
       <view class="status">
-        <image class="status-image" src="../../static/images/settlement-success.png" />
+        <image
+          v-if="challengeStatus === 'success'"
+          class="status-image"
+          src="../../static/images/settlement-success.png"
+        />
+        <image
+          v-if="challengeStatus === 'fail'"
+          class="status-image"
+          src="../../static/images/settlement-fail.png"
+        />
+        <image
+          v-if="challengeStatus === 'draw'"
+          class="status-image"
+          src="../../static/images/settlement-draw.png"
+        />
         <image class="status-label" src="../../static/images/settlement-label.png" />
-        <text class="status-text">挑战成功</text>
+        <text class="status-text">{{ challengeText }}</text>
       </view>
       <view class="right-side right">
         <image class="bg-image" src="../../static/images/settlement-right.png" />
         <image class="avatar" :src="opponentInfo.avatar" />
         <text class="nickname">{{ opponentInfo.name || '阿道夫阿斯蒂芬' }}</text>
         <text class="score">
-          190
+          {{ opponentScore }}
           <text class="label">分</text>
         </text>
       </view>
@@ -33,7 +47,7 @@
           <image src="../../static/images/settlement-gem.png" />
           <text>积分</text>
         </view>
-        <view>+2</view>
+        <view>+{{ settlementInfo.socre }}</view>
       </view>
       <view class="credit-line"></view>
       <view class="credit-item">
@@ -41,7 +55,7 @@
           <image src="../../static/images/settlement-sword.png" />
           <text>经验</text>
         </view>
-        <view>+2</view>
+        <view>+{{ settlementInfo.experience }}</view>
       </view>
       <view class="credit-line"></view>
     </view>
@@ -76,6 +90,16 @@ export default {
         return 'fail';
       }
       return 'draw';
+    },
+    challengeText() {
+      switch (this.challengeStatus) {
+        case 'success':
+          return '挑战成功';
+        case 'fail':
+          return '挑战失败';
+        default:
+          return '平局';
+      }
     }
   },
   mounted() {},

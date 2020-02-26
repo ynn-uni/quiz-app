@@ -35,7 +35,8 @@ export default {
       timerId: null,
       scoreAnim: false,
       curScore: 0,
-      finished: false
+      finished: false,
+      nextFlag: false
     };
   },
   computed: {
@@ -72,10 +73,15 @@ export default {
     },
     nextQuestion() {
       if (this.finished) return;
-      setTimeout(() => {
-        this.$refs.subject.turnToNext();
-        this.reset();
-      }, 1500);
+      if (this.nextFlag === true) {
+        setTimeout(() => {
+          this.$refs.subject.turnToNext();
+          this.reset();
+          this.nextFlag = false;
+        }, 1500);
+      } else {
+        this.nextFlag = true;
+      }
     },
     reset() {
       this.countDown();
