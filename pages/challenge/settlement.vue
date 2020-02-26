@@ -34,7 +34,7 @@
       <view class="right-side right">
         <image class="bg-image" src="../../static/images/settlement-right.png" />
         <image class="avatar" :src="opponentInfo.avatar" />
-        <text class="nickname">{{ opponentInfo.name || '阿道夫阿斯蒂芬' }}</text>
+        <text class="nickname">{{ opponentInfo.name }}</text>
         <text class="score">
           {{ opponentScore }}
           <text class="label">分</text>
@@ -47,7 +47,7 @@
           <image src="../../static/images/settlement-gem.png" />
           <text>积分</text>
         </view>
-        <view>+{{ settlementInfo.socre }}</view>
+        <view>+{{ settlementInfo.score }}</view>
       </view>
       <view class="credit-line"></view>
       <view class="credit-item">
