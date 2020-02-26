@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import { loginOrRegister } from "../../apis";
-import ModelLogin from "../../components/modelLogin.vue";
+import { loginOrRegister, getUserInfoApi } from '../../apis';
+import ModelLogin from '../../components/modelLogin.vue';
 export default {
-  name: "",
+  name: '',
   data() {
     return {
       code: null, //登录获取的code
@@ -37,30 +37,27 @@ export default {
         success: res => {
           // 获取code
           this.code = res.code;
-          console.log("code_login:" + res.code);
+          // console.log('code_login:' + res.code);
           // this.getUserInfo()
           this.getUserInfo();
         }
       });
     },
-    bindGetUserInfo() {
-      console.log(e.detail.userInfo);
-    },
     ShowChild: function(data) {
       console.log(data);
-      if (data === "点击确认") {
+      if (data === '授权成功') {
+        this.isresolve = true;
         this.userInfoApi();
-      } else if (data === "点击取消") {
       }
       this.modalname = null;
     },
     checkUserLogin() {
       if (this.isresolve) {
         uni.navigateTo({
-          url: "/pages/index/index"
+          url: '/pages/index/index'
         });
       } else {
-        this.modalname = "noregister";
+        this.modalname = 'noregister';
       }
     },
     getUserInfo() {
@@ -68,7 +65,7 @@ export default {
         success: res => {
           console.log(res);
 
-          if (res.authSetting["scope.userInfo"]) {
+          if (res.authSetting['scope.userInfo']) {
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称
             this.isresolve = true;
             this.userInfoApi();
@@ -78,7 +75,7 @@ export default {
     },
 
     userInfoApi() {
-      console.log("userInfoApi");
+      console.log('userInfoApi');
       uni.getUserInfo({
         withCredentials: true,
         success: res => {
@@ -87,10 +84,23 @@ export default {
             iv: res.iv,
             encryptedData: res.encryptedData
           }).then(res => {
-            this.$store.commit("user/updateToken", res.data.token);
-            console.log(res);
+            this.$store.commit('user/updateToken', res.data.token);
+            // console.log(res);
+            getUserInfoApi().then(res => {
+              // console.log(res);
+              // console.log(this.$store);
+              const { nickname, portrait, level, streak, score } = res.data;
+              const userinfo = {
+                name: nickname,
+                avatar: portrait,
+                level: level,
+                victory: streak,
+                credit: score // 积分
+              };
+              this.$store.commit('user/updateUserInfo', userinfo);
+            });
             uni.navigateTo({
-              url: "/pages/index/index"
+              url: '/pages/index/index'
             });
           });
         }
@@ -98,13 +108,13 @@ export default {
     },
     setToken(token) {
       uni.setStorage({
-        key: "token",
+        key: 'token',
         data: token,
         success() {
-          console.log("设置缓存成功");
+          console.log('设置缓存成功');
         },
         fail() {
-          console.log("缓存失败了");
+          console.log('缓存失败了');
         }
       });
     }

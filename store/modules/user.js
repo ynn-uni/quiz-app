@@ -14,9 +14,9 @@ export default {
     }
   },
   actions: {
-    login({ commit }) {
-      const userInfo = loginApi();
-      commit('updateUserInfo', userInfo);
-    }
+    // login({ commit }) {
+    //   const userInfo = loginApi();
+    //   commit('updateUserInfo', userInfo);
+    // }
   }
 };

@@ -19,9 +19,8 @@
           <!-- 弹出授权框 -->
           <button
             class="cu-btn bg-green margin-left"
-            @tap="makesure"
             open-type="getUserInfo"
-            bindgetuserinfo="bindGetUserInfo"
+            @getuserinfo="getUserInfo"
             v-if="modalname=='noregister'"
           >确定</button>
         </view>
@@ -34,54 +33,33 @@
 export default {
   data() {
     return {
-      iv: "",
-      encryptedData: ""
+      iv: '',
+      encryptedData: ''
     };
   },
   props: {
-    modalname: ""
+    modalname: ''
   },
 
   methods: {
-    bindGetUserInfo() {
-      console.log(e.detail.userInfo);
+    getUserInfo() {
+      console.log('kkk');
+      uni.getSetting({
+        success: res => {
+          console.log(res);
+
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            this.$emit('ListenChild', '授权成功');
+          }
+        }
+      });
     },
-    // getUserInfo() {
-    //   console.log("kkk");
-    //   uni.getSetting({
-    //     success: res => {
-    //       // this.getIvandSessioncode()
-    //       this.modalname = "noregister";
-    //       if (res.authSetting["scope.userInfo"]) {
-    //         // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-    //         uni.getUserInfo({
-    //           withCredentials: true,
-    //           success: res => {
-    //             console.log({
-    //               code: this.code,
-    //               iv: res.iv,
-    //               encryptedData: res.encryptedData
-    //             });
-    //             postAction("/User/loginOrRegister", {
-    //               code: this.code,
-    //               iv: res.iv,
-    //               encryptedData: res.encryptedData
-    //             }).then(res => {
-    //               console.log(res);
-    //             });
-    //           }
-    //         });
-    //       } else {
-    //         this.modalname = "noregister";
-    //       }
-    //     }
-    //   });
+    // makesure() {
+    //   this.$emit('ListenChild', '点击确认');
     // },
-    makesure() {
-      this.$emit("ListenChild", "点击确认");
-    },
     hideModal(e) {
-      this.$emit("ListenChild", "点击取消");
+      this.$emit('ListenChild', '点击取消');
     }
   }
 };
