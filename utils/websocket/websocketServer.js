@@ -48,6 +48,29 @@ function listenMessage(ws, message) {
                   ],
                   answer: 'A',
                   explain: null
+                },
+                {
+                  id: 5,
+                  title:
+                    '新型冠状病毒都会慢慢( )，所以消毒比提升室温可以有效的预防病毒。',
+                  options: [
+                    { id: 'A', content: '失去活性\r' },
+                    { id: 'B', content: '死亡\r' },
+                    { id: 'C', content: '增加活性' }
+                  ],
+                  answer: 'A',
+                  explain: null
+                },
+                {
+                  id: 5,
+                  title: '所以消毒比提升室温可以有效的预防病毒。',
+                  options: [
+                    { id: 'A', content: '失去活性\r' },
+                    { id: 'B', content: '死亡\r' },
+                    { id: 'C', content: '增加活性' }
+                  ],
+                  answer: 'A',
+                  explain: null
                 }
               ]
             }
@@ -57,7 +80,7 @@ function listenMessage(ws, message) {
       break;
     case 'SCORE':
       sleep(1000).then(() => {
-        receiveScore(ws, data);
+        receiveScore(ws);
       });
       break;
     case 'OVER':
@@ -82,12 +105,12 @@ function getOpponentInfo() {
   };
 }
 
-function receiveScore(ws, message) {
-  const socre = random(1, 10, 10);
+function receiveScore(ws) {
+  const score = random(1, 10, 10);
   ws.send(
     formatMessage({
       operate: 'SCORE',
-      data: { socre }
+      data: { score }
     })
   );
 }
