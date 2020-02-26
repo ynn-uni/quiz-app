@@ -4,10 +4,10 @@
       <block slot="backText">返回</block>
       <block slot="content">擂台挑战</block>
     </cu-custom>
-    <matching v-if="isMatched" :user="userInfo"></matching>
-    <ready v-if="isReady" :user="userInfo" :opponent="opponentInfo"></ready>
-    <quiz v-if="isQuiz && questionList.length" :questions="questionList"></quiz>
-    <settlement v-if="isFinished"></settlement>
+    <matching v-if="isDisplay('MATCH')" :user="userInfo"></matching>
+    <ready v-if="isDisplay('READY')" :user="userInfo" :opponent="opponentInfo"></ready>
+    <quiz v-if="isDisplay('QUIZ') && questionList.length" :questions="questionList"></quiz>
+    <settlement v-if="isDisplay('OVER')"></settlement>
   </view>
 </template>
 
@@ -17,14 +17,16 @@ import Ready from './ready';
 import Quiz from './quiz.vue';
 import Settlement from './settlement';
 import WebsocketUtils from '@/utils/websocket';
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   components: { Matching, Ready, Quiz, Settlement },
   data() {
-    return {};
+    return {
+      statusMap: ['CONNECTED', 'MATCH', 'READY', 'QUIZ', 'OVER'],
+      statusIndex: 0
+    };
   },
   computed: {
-    ...mapState('challenge', ['isMatched', 'isReady', 'isQuiz', 'isFinished']),
     ...mapGetters([
       'questionList',
       'userInfo',
@@ -32,21 +34,9 @@ export default {
       'socketInstance'
     ])
   },
-  watch: {
-    isReady(val) {
-      if (val === false) {
-        this.changeQuizStatus(true);
-      }
-    }
-  },
   onShow: function(options) {
+    this.statusIndex = 0;
     this.initWebsocket().then(instance => {
-      instance.onopen = () => {
-        instance.send({
-          operate: 'MATCH',
-          data: 'matching'
-        });
-      };
       instance.onmessage = evt => {
         this.onSocketMessage(evt);
       };
@@ -55,40 +45,49 @@ export default {
   onUnload: function() {
     this.closeWebsocket();
   },
-  mounted() {
-    console.log(this.questionList);
-  },
   methods: {
-    ...mapMutations('challenge', ['changeQuizStatus']),
     ...mapActions('challenge', ['initWebsocket', 'closeWebsocket']),
-
+    isDisplay(step) {
+      const { statusIndex, statusMap } = this;
+      const curStatus = statusMap[statusIndex];
+      return curStatus === step;
+    },
     // 监听socket事件
     onSocketMessage(evt) {
-      const { commit } = this.$store;
-      console.log('----', evt);
+      const { state, commit } = this.$store;
+      console.log('receive:', evt);
       const { operate, data } = JSON.parse(evt.data);
-      if (operate === 'MATCH') {
-        const { rival, subjects } = data;
-        const opponentInfo = {
-          name: rival.nickname,
-          avatar: rival.portrait,
-          score: rival.score,
-          victory: rival.streak,
-          level: rival.level
-        };
-        commit('challenge/updateOpponentInfo', opponentInfo);
-        commit('challenge/updateQuestionList', subjects);
-        commit('challenge/changeMatchStatus', false);
-        commit('challenge/changeReadyStatus', true);
-        setTimeout(() => {
-          commit('challenge/changeReadyStatus', false);
-        }, 3000);
-      }
-      if (operate === 'SCORE') {
-        commit('challenge/updateOpponentScore', data.score);
-      }
-      if (operate === 'OVER') {
-        commit('challenge/updateSettlementInfo', data);
+
+      switch (operate) {
+        case 'CONNECTED':
+          this.statusIndex = 1;
+          this.socketInstance.send({
+            operate: 'MATCH',
+            data: 'matching'
+          });
+          break;
+        case 'MATCH':
+          this.statusIndex = 2;
+          const { rival, subjects } = data;
+          const opponentInfo = {
+            name: rival.nickname,
+            avatar: rival.portrait,
+            victory: rival.streak,
+            level: rival.level
+          };
+          commit('challenge/updateOpponentInfo', opponentInfo);
+          commit('challenge/updateQuestionList', subjects);
+          setTimeout(() => {
+            this.statusIndex = 3;
+          }, 3000);
+          break;
+        case 'SCORE':
+          commit('challenge/updateOpponentScore', data.score);
+          break;
+        case 'OVER':
+          this.statusIndex = 4;
+          commit('challenge/updateSettlementInfo', data);
+          break;
       }
     }
   }
