@@ -9,26 +9,60 @@ wss.on('connection', function connection(ws) {
     listenMessage(ws, message);
   });
 
-  ws.send('connection websocket server');
+  ws.send(
+    formatMessage({
+      operate: 'CONNECTED',
+      data: 'CONNECTED'
+    })
+  );
 });
 
 function listenMessage(ws, message) {
-  if (message === 'ping') {
-    ws.send('pong');
-  }
-  if (message === 'matching') {
-    const opponentInfo = getOpponentInfo();
-    sleep(2000).then(() => {
-      ws.send(`opponent#${opponentInfo}`);
-    });
-  }
-  if (/score/.test(message)) {
-    sleep(1000).then(() => {
-      receiveScore(ws, message);
-    });
-  }
-  if (message === 'finish') {
-    settlementQuiz(ws);
+  const { operate, data } = JSON.parse(message);
+  switch (operate) {
+    case 'PING':
+      ws.send(
+        formatMessage({
+          operate: 'PING',
+          data: 'PONG'
+        })
+      );
+      break;
+    case 'MATCH':
+      const opponentInfo = getOpponentInfo();
+      sleep(2000).then(() => {
+        ws.send(
+          formatMessage({
+            operate: 'MATCH',
+            data: {
+              rival: opponentInfo,
+              subjects: [
+                {
+                  id: 5,
+                  title:
+                    '从一般规律来看，不管在30度还是比较低的冬天的气温里，新型冠状病毒都会慢慢( )，所以消毒比提升室温可以有效的预防病毒。',
+                  options: [
+                    { id: 'A', content: '失去活性\r' },
+                    { id: 'B', content: '死亡\r' },
+                    { id: 'C', content: '增加活性' }
+                  ],
+                  answer: 'A',
+                  explain: null
+                }
+              ]
+            }
+          })
+        );
+      });
+      break;
+    case 'SCORE':
+      sleep(1000).then(() => {
+        receiveScore(ws, data);
+      });
+      break;
+    case 'OVER':
+      settlementQuiz(ws);
+      break;
   }
 }
 
@@ -40,9 +74,9 @@ function getOpponentInfo() {
   const score = 1100;
   const level = 5;
   return JSON.stringify({
-    avatar,
-    name,
-    victory,
+    portrait: avatar,
+    nickname: name,
+    streak: victory,
     score,
     level
   });
@@ -50,7 +84,12 @@ function getOpponentInfo() {
 
 function receiveScore(ws, message) {
   const socre = random(1, 10, 10);
-  ws.send(`score#${socre}`);
+  ws.send(
+    formatMessage({
+      operate: 'SCORE',
+      data: { socre }
+    })
+  );
 }
 
 function settlementQuiz(ws) {
@@ -78,4 +117,8 @@ function sleep(time, val) {
 
 function random(min = 1, max = 10, step = 1) {
   return Math.floor(Math.random() * max + min) * step;
+}
+
+function formatMessage(data) {
+  return JSON.stringify(data);
 }
