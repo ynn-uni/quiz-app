@@ -12,3 +12,9 @@ export function login() {
     credit: 1000 // 积分
   };
 }
+export function loginOrRegister(data) {
+  return postAction('/User/loginOrRegister', data);
+}
+export function getUserInfoApi(data) {
+  return getAction('/User/getUserInfo', data);
+}

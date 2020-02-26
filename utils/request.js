@@ -1,3 +1,4 @@
+import store from '../store';
 const baseUrl = 'http://192.168.1.65:9501';
 export async function request(url = '', method = 'GET', data = {}, token = '') {
   return uni
@@ -5,7 +6,7 @@ export async function request(url = '', method = 'GET', data = {}, token = '') {
       url: `${baseUrl}${url}`,
       data,
       header: {
-        Authorization: token
+        Authorization: store.state.user.token
       },
       method
     })
@@ -18,10 +19,10 @@ export async function request(url = '', method = 'GET', data = {}, token = '') {
     });
 }
 
-export async function postAction(url, data) {
+export async function postAction(url, data = {}) {
   return request(url, 'POST', data);
 }
 
-export async function getAction(url, data, token) {
-  return request(url, 'GET', data, token);
+export async function getAction(url, data = {}) {
+  return request(url, 'GET', data);
 }
