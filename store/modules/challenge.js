@@ -21,17 +21,14 @@ export default {
     updateOpponentInfo(state, info) {
       state.opponentInfo = info;
     },
-    updateRoomId(state, id) {
-      state.roomId = id;
-    },
     updateQuestionList(state, list = []) {
       state.questionList = list;
     },
     updateUserScore(state, score) {
-      state.userScore += score;
+      state.userScore = score;
     },
     updateOpponentScore(state, score) {
-      state.opponentScore += score;
+      state.opponentScore = score;
     },
     changeMatchStatus(state, status) {
       state.isMatched = status;
@@ -51,18 +48,16 @@ export default {
   },
   actions: {
     initWebsocket(context) {
-      const { commit } = context;
+      const { commit, rootState } = context;
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
           // url: 'ws://mahy-mac.local:8888/'
-          url: 'ws://192.168.1.65:9502/Battle'
+          url: 'ws://192.168.1.65:9502/Battle',
+          header: {
+            Authorization: rootState.user.token
+          }
         });
-        instance.onmessage = evt => {
-          listenMessage(context, evt);
-        };
-        instance.onopen = () => {
-          resolve(instance);
-        };
+        resolve(instance);
         commit('updateSocketInstance', instance);
       });
     },
@@ -77,7 +72,6 @@ export default {
       state.socketInstance.send({
         operate: 'SCORE',
         data: {
-          room: state.roomId,
           score
         }
       });
@@ -94,34 +88,3 @@ export default {
     }
   }
 };
-
-function listenMessage(context, evt) {
-  const { commit } = context;
-  console.log('----', evt);
-  const { operate, data } = JSON.parse(evt.data);
-  if (operate === 'MATCH') {
-    const { room, rival, subjects } = data;
-    const opponentInfo = {
-      name: rival.nickname,
-      avatar: rival.portrait,
-      score: rival.score,
-      victory: rival.streak,
-      level: rival.level
-    };
-    commit('updateRoomId', room);
-    commit('updateOpponentInfo', opponentInfo);
-    commit('updateQuestionList', subjects);
-    commit('changeMatchStatus', false);
-    commit('changeReadyStatus', true);
-    setTimeout(() => {
-      commit('changeReadyStatus', false);
-    }, 3000);
-    console.log(context.state);
-  }
-  if (operate === 'SCORE') {
-    commit('updateOpponentScore', data.score);
-  }
-  if (operate === 'OVER') {
-    commit('updateSettlementInfo', data);
-  }
-}

@@ -2,6 +2,7 @@
 class WebSocketUtils {
   constructor({
     url,
+    header = {},
     pingTimeout = 15000,
     pongTimeout = 10000,
     reconnectTimeout = 500,
@@ -10,6 +11,7 @@ class WebSocketUtils {
   }) {
     this._options = {
       url,
+      header,
       pingTimeout,
       pongTimeout,
       reconnectTimeout,
@@ -49,13 +51,11 @@ class WebSocketUtils {
   }
 
   connect() {
-    const { url } = this._options;
+    const { url, header } = this._options;
     try {
       this.socketTask = uni.connectSocket({
         url,
-        header: {
-          Authorization: 'token'
-        },
+        header,
         complete: () => {
           // console.warn('websocket open')
         }
