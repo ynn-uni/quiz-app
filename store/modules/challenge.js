@@ -51,11 +51,14 @@ export default {
   },
   actions: {
     initWebsocket(context) {
-      const { commit } = context;
+      const { commit, rootState } = context;
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
           // url: 'ws://mahy-mac.local:8888/'
-          url: 'ws://192.168.1.65:9502/Battle'
+          url: 'ws://192.168.1.65:9502/Battle',
+          header: {
+            Authorization: rootState.user.token
+          }
         });
         instance.onmessage = evt => {
           listenMessage(context, evt);
