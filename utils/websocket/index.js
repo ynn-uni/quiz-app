@@ -69,7 +69,6 @@ class WebSocketUtils {
 
   initEventHandle() {
     this.socketTask.onOpen(evt => {
-      this.repeatTimes = 0;
       this.onopen(evt);
       this.heartCheck();
     });
