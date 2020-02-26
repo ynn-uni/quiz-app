@@ -88,6 +88,7 @@ export default {
         case 'OVER':
           this.statusIndex = 4;
           commit('challenge/updateSettlementInfo', data);
+          this.closeWebsocket();
           break;
       }
     }
