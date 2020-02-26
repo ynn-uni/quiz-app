@@ -41,8 +41,11 @@ export default {
             Authorization: rootState.user.token
           }
         });
-        resolve(instance);
+        // 每次重建连接时初始化store中的分值
+        commit('updateUserScore', 0);
+        commit('updateOpponentScore', 0);
         commit('updateSocketInstance', instance);
+        resolve(instance);
       });
     },
     closeWebsocket({ state, commit }) {
