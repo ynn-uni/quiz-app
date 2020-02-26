@@ -57,12 +57,7 @@ export default {
             Authorization: rootState.user.token
           }
         });
-        instance.onmessage = evt => {
-          listenMessage(context, evt);
-        };
-        instance.onopen = () => {
-          resolve(instance);
-        };
+        resolve(instance);
         commit('updateSocketInstance', instance);
       });
     },
@@ -93,33 +88,3 @@ export default {
     }
   }
 };
-
-function listenMessage(context, evt) {
-  const { commit } = context;
-  console.log('----', evt);
-  const { operate, data } = JSON.parse(evt.data);
-  if (operate === 'MATCH') {
-    const { rival, subjects } = data;
-    const opponentInfo = {
-      name: rival.nickname,
-      avatar: rival.portrait,
-      score: rival.score,
-      victory: rival.streak,
-      level: rival.level
-    };
-    commit('updateOpponentInfo', opponentInfo);
-    commit('updateQuestionList', subjects);
-    commit('changeMatchStatus', false);
-    commit('changeReadyStatus', true);
-    setTimeout(() => {
-      commit('changeReadyStatus', false);
-    }, 3000);
-    console.log(context.state);
-  }
-  if (operate === 'SCORE') {
-    commit('updateOpponentScore', data.score);
-  }
-  if (operate === 'OVER') {
-    commit('updateSettlementInfo', data);
-  }
-}

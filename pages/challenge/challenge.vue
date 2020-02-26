@@ -41,10 +41,15 @@ export default {
   },
   onShow: function(options) {
     this.initWebsocket().then(instance => {
-      instance.send({
-        operate: 'MATCH',
-        data: 'matching'
-      });
+      instance.onopen = () => {
+        instance.send({
+          operate: 'MATCH',
+          data: 'matching'
+        });
+      };
+      instance.onmessage = evt => {
+        this.onSocketMessage(evt);
+      };
     });
   },
   onUnload: function() {
@@ -55,7 +60,37 @@ export default {
   },
   methods: {
     ...mapMutations('challenge', ['changeQuizStatus']),
-    ...mapActions('challenge', ['initWebsocket', 'closeWebsocket'])
+    ...mapActions('challenge', ['initWebsocket', 'closeWebsocket']),
+
+    // 监听socket事件
+    onSocketMessage(evt) {
+      const { commit } = this.$store;
+      console.log('----', evt);
+      const { operate, data } = JSON.parse(evt.data);
+      if (operate === 'MATCH') {
+        const { rival, subjects } = data;
+        const opponentInfo = {
+          name: rival.nickname,
+          avatar: rival.portrait,
+          score: rival.score,
+          victory: rival.streak,
+          level: rival.level
+        };
+        commit('challenge/updateOpponentInfo', opponentInfo);
+        commit('challenge/updateQuestionList', subjects);
+        commit('challenge/changeMatchStatus', false);
+        commit('challenge/changeReadyStatus', true);
+        setTimeout(() => {
+          commit('challenge/changeReadyStatus', false);
+        }, 3000);
+      }
+      if (operate === 'SCORE') {
+        commit('challenge/updateOpponentScore', data.score);
+      }
+      if (operate === 'OVER') {
+        commit('challenge/updateSettlementInfo', data);
+      }
+    }
   }
 };
 </script>
