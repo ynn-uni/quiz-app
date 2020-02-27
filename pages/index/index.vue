@@ -12,7 +12,7 @@
           <image src="../../static/images/brand.png" />
         </view>
         <view class="index-mode flex justify-between">
-          <view class="index-mode-item margin-top" @click="handleClick('exercise')">
+          <view class="index-mode-item margin-top" @click="handleModeSelect('exercise')">
             <image src="../../static/images/exercise.png" />
             <image
               v-if="selectedMode === 'exercise'"
@@ -21,7 +21,7 @@
             />
           </view>
           <view class="index-mode-item">
-            <image src="../../static/images/challenge.png" @click="handleClick('challenge')" />
+            <image src="../../static/images/challenge.png" @click="handleModeSelect('challenge')" />
             <image
               v-if="selectedMode === 'challenge'"
               class="index-mode-mask"
@@ -29,10 +29,11 @@
             />
           </view>
         </view>
-        <view class="index-go" hover-class="btn-hover-trans">
+        <!-- <view class="index-go" hover-class="btn-hover-trans">
           <image class="btn-image" src="../../static/images/start.png" @click="turnToPage" />
-        </view>
+        </view>-->
       </view>
+
       <ModelLogin v-on:ListenChild="ShowChild" :modalname="modalname"></ModelLogin>
     </view>
   </view>
@@ -64,11 +65,11 @@ export default {
     this.wxLogin();
   },
   methods: {
-    handleClick(evt) {
+    handleModeSelect(evt) {
       this.selectedMode = evt;
-      // setTimeout(() => {
-      // 	this.turnToPage()
-      // }, 0)
+      setTimeout(() => {
+        this.turnToPage();
+      }, 0);
     },
     turnToPage() {
       const urlKey = this.selectedMode + 'Url';
