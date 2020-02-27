@@ -21,6 +21,7 @@
             class="cu-btn bg-green margin-left"
             open-type="getUserInfo"
             @getuserinfo="getUserInfo"
+            @click="makesure"
             v-if="modalname=='noregister'"
           >确定</button>
         </view>
@@ -43,7 +44,6 @@ export default {
 
   methods: {
     getUserInfo() {
-      console.log('kkk');
       uni.getSetting({
         success: res => {
           console.log(res);
@@ -54,10 +54,11 @@ export default {
           }
         }
       });
+      // this.$emit('ListenChild', '授权成功');
     },
-    // makesure() {
-    //   this.$emit('ListenChild', '点击确认');
-    // },
+    makesure() {
+      this.$emit('ListenChild', '点击确认');
+    },
     hideModal(e) {
       this.$emit('ListenChild', '点击取消');
     }
