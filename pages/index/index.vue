@@ -5,7 +5,7 @@
       <cu-custom>
         <block slot="content">竞猜答题</block>
       </cu-custom>
-      <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button>
+      <!-- <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button> -->
       <index-header :isLogin="token != null" @onlogin="showAuthModal"></index-header>
       <user-level></user-level>
       <view class="index-bottom flex flex-direction justify-center flex-sub">
