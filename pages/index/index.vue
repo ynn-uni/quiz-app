@@ -7,8 +7,8 @@
       </cu-custom>
       <index-header v-on:ListenChild1="checkUserLogin"></index-header>
       <user-level></user-level>
-      <view class="index-bottom flex flex-direction justify-around flex-sub">
-        <view class="index-brand">
+      <view class="index-bottom flex flex-direction justify-center flex-sub">
+        <view class="index-brand margin-bottom-lg">
           <image src="../../static/images/brand.png" />
         </view>
         <view class="index-mode flex justify-between">
