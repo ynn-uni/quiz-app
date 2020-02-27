@@ -3,7 +3,7 @@
 		<image class="index-bg" src="../../static/images/index-bg.png"></image>
 		<view class="index-content">
 			<cu-custom><block slot="content">竞猜答题</block></cu-custom>
-			<index-header></index-header>
+			<index-header v-on:ListenChild1="checkUserLogin"></index-header>
 			<user-level></user-level>
 			<view class="index-bottom flex flex-direction justify-around flex-sub">
 				<view class="index-brand"><image src="../../static/images/brand.png"></image></view>
@@ -21,6 +21,7 @@
 					<image class="btn-image" src="../../static/images/start.png" @click="turnToPage"></image>
 				</view>
 			</view>
+			<ModelLogin v-on:ListenChild="ShowChild" :modalname="modalname"></ModelLogin>
 		</view>
 	</view>
 </template>
@@ -28,15 +29,29 @@
 <script>
 import IndexHeader from './header.vue';
 import UserLevel from './level.vue';
+import { loginOrRegister, getUserInfoApi } from '../../apis';
+import ModelLogin from '../../components/modelLogin.vue';
 export default {
-	components: { IndexHeader, UserLevel },
+	components: { IndexHeader, UserLevel ,ModelLogin},
 	data() {
 		return {
 			selectedMode: null,
 			challengeUrl: '/pages/challenge/challenge',
-			exerciseUrl: '/pages/exercise/exercise'
+			exerciseUrl: '/pages/exercise/exercise',
+			isresolve:null,
+			modalname:null
 		};
 	},
+	onShareAppMessage(e) {
+    console.log(e);
+    return {
+      title: '答题小程序测试分享',
+      path: '/pages/cover/cover'
+    };
+	},
+	 onShow() {
+    this.wxLogin();
+  },
 	methods: {
 		handleClick(evt) {
 			this.selectedMode = evt;
@@ -49,6 +64,102 @@ export default {
 			uni.navigateTo({
     		url: this[urlKey]
 			})
+		},
+
+	//登陆相关
+	 wxLogin() {
+      uni.login({
+        success: res => {
+          // 获取code
+          this.code = res.code;
+          // console.log('code_login:' + res.code);
+          // this.getUserInfo()
+          this.getUserInfo();
+        }
+      });
+		},
+		ShowChild: function(data) {
+      console.log(data);
+      this.modalname = null;
+      if (data === '授权成功') {
+        this.isresolve = true;
+
+        this.userInfoApi();
+      }
+    },
+    checkUserLogin:function(data) {
+      console.log(data)
+        this.modalname = 'noregister';
+      
+    },
+    getUserInfo() {
+      uni.getSetting({
+        success: res => {
+          console.log(res);
+
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            this.isresolve = true;
+            this.userInfoApi();
+          }
+        }
+      });
+    },
+
+    userInfoApi() {
+      uni.getUserInfo({
+        withCredentials: true,
+        success: res => {
+          loginOrRegister({
+            code: this.code,
+            iv: res.iv,
+            encryptedData: res.encryptedData
+          }).then(res => {
+            console.log(res);
+            this.$store.commit('user/updateToken', res.data.token);
+            // console.log(res);
+            getUserInfoApi().then(res => {
+              console.log(res);
+              // console.log(this.$store);
+              //
+              const {
+                battle,
+                defeat,
+                id,
+                level,
+                nickname,
+                portrait,
+                score,
+                sex,
+                streak,
+								train,
+								today_rank,
+								today_score,
+								experience
+              } = res.data;
+              const userinfo = {
+                name: nickname,
+                avatar: portrait,
+                level: level,
+                victory: streak, //胜场
+                credit: score, // 积分
+                battle,
+                defeat, //败场
+                id,
+                sex,
+								train,
+								today_rank,
+								today_score,
+								experience
+              };
+              this.$store.commit('user/updateUserInfo', userinfo);
+              // uni.navigateTo({
+              //   url: '/pages/index/index'
+              // });
+            });
+          });
+        }
+      });
 		}
 	}
 };

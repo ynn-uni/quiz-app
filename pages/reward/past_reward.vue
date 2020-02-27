@@ -23,8 +23,11 @@
 		</view>
 		<view class="list" :style="{'height':(height-23)+'px'}">
 			<view class="item flex align-center justify-center padding-tb-xs" v-for="(item,index) in lotteryList" :key="index">
-				<image class="margin-right-lg" :src="item.user.portrait" mode=""></image>
-				{{item.user.nickname}}
+				<image class="margin-right-ms" :src="item.user.portrait" mode=""></image>
+				<view class="name">
+					{{item.user.nickname}}
+				</view>
+				
 			</view>
 			
 		</view>
@@ -124,6 +127,11 @@ import { getLotteryList} from "../../apis";
 					border-radius: 50%;
 					width: 72rpx;
 					height: 72rpx;
+				}
+				.name{
+					width: 150rpx;
+					height: 28rpx;
+					
 				}
 			}
 		}

@@ -2,7 +2,7 @@ import { login as loginApi } from '../../apis';
 export default {
   namespaced: true,
   state: {
-    userInfo: null,
+    userInfo: {},
     token: ''
   },
   mutations: {

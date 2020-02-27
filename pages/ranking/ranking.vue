@@ -16,7 +16,10 @@
 						好友排行
 					</view>
 				</view> -->
-				<view class="rank_itemlist" :style="{'height':height+'px'}">
+				<view v-if="ranking.length<=0" class="rank_itemlist text-center flex align-center justify-center" :style="{'height':height+'px'}">
+					暂无相关数据
+				</view>
+				<view v-if="ranking.length>0" class="rank_itemlist" :style="{'height':height+'px'}">
 					<view class="rank_item padding-sm flex align-center justify-between" v-for="(item,index) in ranking" :key="index">
 						<view class="left flex align-center">
 							<view class="num ">

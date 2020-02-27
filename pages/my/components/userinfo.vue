@@ -65,7 +65,10 @@ export default {
     ...mapGetters(['userInfo']),
     winRate() {
       if (this.userInfo.battle) {
-        return (1 - this.userInfo.defeat / this.userInfo.battle) * 100;
+        return (
+          (1 - this.userInfo.defeat / this.userInfo.battle) *
+          100
+        ).toFixed(2);
       }
       return 0;
     },

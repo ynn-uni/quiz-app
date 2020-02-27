@@ -1,14 +1,14 @@
 <template>
 	<view class="index-header flex justify-between padding">
 		<view class="flex flex-direction">
-			<navigator class="flex flex-direction">
+			<view class="flex flex-direction" >
 				<image src="../../static/images/share.png"></image>
-				<view class="label">分享</view>
-			</navigator>
-			<navigator class="flex flex-direction margin-top-sm" url="/pages/ranking/ranking">
+				<button class="label share" open-type="share">分享</button>
+			</view>
+			<view class="flex flex-direction margin-top-sm" @click="checkIsLogin('/pages/ranking/ranking')">
 				<image src="../../static/images/board.png"></image>
 				<view class="label">排行榜</view>
-			</navigator>
+			</view>
 		</view>
 		<view class="user-info">
 			<view class="avatar">
@@ -25,16 +25,47 @@
 				<image src="../../static/images/rule.png"></image>
 				<view class="label">规则</view>
 			</navigator>
-			<navigator class="flex flex-direction margin-top-sm" url="/pages/reward/reward">
+			<view class="flex flex-direction margin-top-sm" @click="checkIsLogin('/pages/reward/reward')" >
 				<image src="../../static/images/reward.png"></image>
 				<view class="label">奖励</view>
-			</navigator>
+			</view>
 		</view>
 	
 	</view>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+export default {
+  data() {
+    return {};
+	},
+	computed: {
+    ...mapGetters(['userInfo']),
+    
+  },
+  onShareAppMessage(e) {
+    console.log(e);
+    return {
+      title: '答题小程序测试分享',
+      path: '/pages/cover/cover'
+    };
+  },
+  methods: {
+		checkIsLogin(url){
+			//url="/pages/ranking/ranking"
+			console.log(this.userInfo)
+			if(this.userInfo){
+					uni.navigateTo({
+					url: url
+				});
+			}else{
+				this.$emit('ListenChild1','jjj');
+			}
+			 
+		}
+	}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -54,6 +85,10 @@
 			text-align: center;
 			background-color: $bg-label;
 			border-radius: 500rpx;
+		}
+		.share{
+			padding-left: 0;
+			padding-right: 0;
 		}
 		.user-info {
 			.avatar {
