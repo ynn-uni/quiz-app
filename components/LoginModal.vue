@@ -7,7 +7,7 @@
           <text class="cuIcon-close text-red"></text>
         </view>
       </view>
-      <view class="padding-xl">'请先登录后在进行操作！'</view>
+      <view class="padding-xl">请先登录后在进行操作！</view>
       <view class="cu-bar bg-white justify-end">
         <view class="action">
           <button class="cu-btn line-green text-green" @tap="handleCancel">暂不登录</button>
@@ -37,14 +37,16 @@ export default {
     close() {
       this.showModal = false;
     },
-    getUserInfo(evt) {
-      this.handleConfirm();
-    },
     handleConfirm() {
       this.close();
-      this.$emit('confirm');
     },
-    handleCancel(e) {
+    getUserInfo(evt) {
+      const errMsg = evt.detail.errMsg;
+      if (errMsg === 'getUserInfo:ok') {
+        this.$emit('confirm', evt.detail);
+      }
+    },
+    handleCancel() {
       this.close();
       this.$emit('cancel');
     }
