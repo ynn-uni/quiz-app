@@ -45,11 +45,12 @@ export default {
     },
     ShowChild: function(data) {
       console.log(data);
+      this.modalname = null;
       if (data === '授权成功') {
         this.isresolve = true;
+
         this.userInfoApi();
       }
-      this.modalname = null;
     },
     checkUserLogin() {
       if (this.isresolve) {
@@ -75,7 +76,6 @@ export default {
     },
 
     userInfoApi() {
-      console.log('userInfoApi');
       uni.getUserInfo({
         withCredentials: true,
         success: res => {
@@ -84,6 +84,7 @@ export default {
             iv: res.iv,
             encryptedData: res.encryptedData
           }).then(res => {
+            console.log(res);
             this.$store.commit('user/updateToken', res.data.token);
             // console.log(res);
             getUserInfoApi().then(res => {
@@ -115,9 +116,9 @@ export default {
                 train
               };
               this.$store.commit('user/updateUserInfo', userinfo);
-            });
-            uni.navigateTo({
-              url: '/pages/index/index'
+              uni.navigateTo({
+                url: '/pages/index/index'
+              });
             });
           });
         }
