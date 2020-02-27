@@ -5,17 +5,18 @@
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-people margin-right-sm color_mycuicon'></text>
-			<input placeholder="姓名" name="input" v-model="name"></input>
+			<input placeholder="姓名" name="input" v-model="name" disabled></input>
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-phone margin-right-sm color_my'></text>
-			<input placeholder="电话" name="input" v-model="phone"></input>
+			<input placeholder="电话" name="input" v-model="tel" disabled></input>
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-location margin-right-sm color_mycuicon'></text>
-			<input placeholder="地址" name="input" v-model="address"></input>
+			<input placeholder="地址" name="input" v-model="address" disabled></input>
 		</view>
-		<button class="cu-btn round lg bg-orange margin-top-sm" @click="save">保存</button>
+		<!-- <button class="cu-btn round lg bg-orange margin-top-sm" @click="save">保存</button> -->
+		<button class="cu-btn round lg bg-orange margin-top-sm" @tap='wxaddress'>编辑</button>
 	</view>
 </template>
 
@@ -25,18 +26,56 @@ import {setUserInfo} from '../../../apis'
 		data() {
 			return {
 				name:null,
-				phone:null,
+				tel:null,
 				address:null
 			}
 		},
 		// /User/setUserInfo
+		
 		methods: {
+			wxaddress() {
+			    const that=this
+			    const arr={}
+			    wx.getSetting({
+			      success(res) { 
+			        if (res.authSetting['scope.address']) { 
+			          wx.chooseAddress({
+			            success(res) { 
+							that.setAddressInfo(res)
+							
+			            }
+			          }) 
+			        } else {
+			          if (res.authSetting['scope.address'] == false) { 
+			            wx.openSetting({
+			              success(res) { 
+			                console.log(res)
+			              }
+			            })
+			          } else { 
+			            wx.chooseAddress({
+			              success(res) { 
+							  that.setAddressInfo(res)
+			                
+			              }
+			            })
+			          }
+			        }
+			      }
+			    })
+			},
+			 setAddressInfo(data){
+				 this.name=data.userName
+				 this.tel=data.telNumber
+				 this.address=data.cityName+data.countyName+data.detailInfo
+				 this.save()
+			 },
 			save(){
-				console.log(this.name,this.phone,this.address)
-				if(this.name&&this.phone&&this.address){
+				console.log(this.name,this.tel,this.address)
+				if(this.name&&this.tel&&this.address){
 					setUserInfo({
 						truename:this.name,
-						mobile:this.phone,
+						mobile:this.tel,
 						address:this.address
 					}).then((res)=>{
 						console.log(res)
