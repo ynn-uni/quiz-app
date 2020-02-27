@@ -2,10 +2,10 @@
   <view class="index-header flex justify-between padding">
     <view class="flex flex-direction">
       <view class="flex flex-direction">
-        <button class="share-image" open-type="share">
+        <button class="flex flex-direction share-btn" open-type="share">
           <image src="../../static/images/share.png" />
+          <view class="label">分享</view>
         </button>
-        <button class="label share-label" open-type="share">分享</button>
       </view>
       <view
         class="flex flex-direction margin-top-sm"
@@ -85,15 +85,12 @@ $bg-label: #7f41c1;
     background-color: $bg-label;
     border-radius: 500rpx;
   }
-  .share-image {
+  .share-btn {
     display: flex;
     padding: unset;
     background: none;
   }
-  .share-label {
-    padding-left: 0;
-    padding-right: 0;
-  }
+
   .user-info {
     .avatar {
       border-radius: 160rpx;
