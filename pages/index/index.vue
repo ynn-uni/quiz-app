@@ -93,7 +93,7 @@ export default {
       if (data === '授权成功') {
         this.isresolve = true;
 
-        this.userInfoApi();
+        this.getWxUserInfo();
       }
     },
     checkUserLogin: function(data) {
@@ -107,13 +107,14 @@ export default {
           if (res.authSetting['scope.userInfo']) {
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称
             this.isresolve = true;
-            this.userInfoApi();
+            this.getWxUserInfo();
           }
         }
       });
     },
 
-    userInfoApi() {
+    // 获取微信的用户信息
+    getWxUserInfo() {
       uni.getUserInfo({
         withCredentials: true,
         success: res => {
