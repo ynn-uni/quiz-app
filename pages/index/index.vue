@@ -5,8 +5,7 @@
       <cu-custom>
         <block slot="content">竞猜答题</block>
       </cu-custom>
-      <!-- <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button> -->
-      <index-header :isLogin="token != null" @onlogin="showAuthModal"></index-header>
+      <index-header @nologin="showAuthModal"></index-header>
       <user-level></user-level>
       <view class="index-bottom flex flex-direction justify-center flex-sub">
         <view class="index-brand margin-bottom-lg">
@@ -31,11 +30,12 @@
           </view>
         </view>
         <!-- <view class="index-go" hover-class="btn-hover-trans">
+        <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button>
           <image class="btn-image" src="../../static/images/start.png" @click="turnToPage" />
         </view>-->
       </view>
 
-      <ModelLogin ref="modal" @confirm="getWxUserInfo"></ModelLogin>
+      <login-modal ref="modal" @confirm="handleModalConfirm"></login-modal>
     </view>
   </view>
 </template>
@@ -44,17 +44,15 @@
 import IndexHeader from './header.vue';
 import UserLevel from './level.vue';
 import { loginOrRegister, getUserInfoApi } from '../../apis';
-import ModelLogin from '../../components/modelLogin.vue';
+import LoginModal from '../../components/LoginModal.vue';
 import { mapGetters } from 'vuex';
 export default {
-  components: { IndexHeader, UserLevel, ModelLogin },
+  components: { IndexHeader, UserLevel, LoginModal },
   data() {
     return {
       selectedMode: null,
       challengeUrl: '/pages/challenge/challenge',
-      exerciseUrl: '/pages/exercise/exercise',
-      isresolve: null,
-      modalname: null
+      exerciseUrl: '/pages/exercise/exercise'
     };
   },
   computed: {
@@ -70,21 +68,6 @@ export default {
     this.wxLogin();
   },
   methods: {
-    handleModeSelect(evt) {
-      if (!this.checkUserLogin()) return;
-
-      this.selectedMode = evt;
-      setTimeout(() => {
-        this.turnToPage();
-      }, 0);
-    },
-    turnToPage() {
-      const urlKey = this.selectedMode + 'Url';
-      uni.navigateTo({
-        url: this[urlKey]
-      });
-    },
-
     //登陆相关
     wxLogin() {
       uni.login({
@@ -95,54 +78,42 @@ export default {
         }
       });
     },
-    ShowChild: function(data) {
-      console.log(data);
-      this.modalname = null;
-      if (data === '授权成功') {
-        this.isresolve = true;
-
-        this.getWxUserInfo();
-      }
-    },
-    showAuthModal() {
-      this.$refs.modal.show();
-    },
-    checkUserLogin: function(data) {
-      if (!this.token) {
-        this.showAuthModal();
-        return false;
-      }
-      return true;
-    },
     // 检查用户授权设置
     checkUserSetting() {
-      uni.getSetting({
-        success: res => {
-          if (res.authSetting['scope.userInfo']) {
-            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-            this.isresolve = true;
-            this.getWxUserInfo();
-          }
+      uni.getSetting().then(res => {
+        const [error, data] = res;
+        if (data.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          this.getWxUserInfo();
         }
       });
     },
-
     // 获取微信的用户信息
     getWxUserInfo() {
-      uni.getUserInfo({
-        withCredentials: true,
-        success: res => {
-          loginOrRegister({
-            code: this.code,
-            iv: res.iv,
-            encryptedData: res.encryptedData
-          }).then(res => {
-            this.$store.commit('user/updateToken', res.data.token);
-            this.fatchUserInfoByToken();
-          });
-        }
+      uni
+        .getUserInfo({
+          withCredentials: true
+        })
+        .then(res => {
+          const [error, data] = res;
+          if (data) {
+            const { iv, encryptedData } = data;
+            this.loginWithUserInfo(iv, encryptedData);
+          }
+        });
+    },
+    // 在后端登录或注册
+    loginWithUserInfo(iv, encryptedData) {
+      return loginOrRegister({
+        code: this.code,
+        iv: iv,
+        encryptedData: encryptedData
+      }).then(res => {
+        this.$store.commit('user/updateToken', res.data.token);
+        this.fatchUserInfoByToken();
       });
     },
+    // 从后端获取用户信息
     fatchUserInfoByToken() {
       getUserInfoApi().then(res => {
         const {
@@ -176,6 +147,34 @@ export default {
           experience
         };
         this.$store.commit('user/updateUserInfo', userinfo);
+      });
+    },
+    handleModeSelect(evt) {
+      if (!this.checkUserLogin()) return;
+
+      this.selectedMode = evt;
+      setTimeout(() => {
+        this.turnToPage();
+      }, 0);
+    },
+    checkUserLogin: function(data) {
+      if (!this.token) {
+        this.showAuthModal();
+        return false;
+      }
+      return true;
+    },
+    showAuthModal() {
+      this.$refs.modal.show();
+    },
+    handleModalConfirm(evt) {
+      const { iv, encryptedData } = evt;
+      this.loginWithUserInfo(iv, encryptedData);
+    },
+    turnToPage() {
+      const urlKey = this.selectedMode + 'Url';
+      uni.navigateTo({
+        url: this[urlKey]
       });
     }
   }
