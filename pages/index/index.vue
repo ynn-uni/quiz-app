@@ -55,10 +55,9 @@ export default {
     };
   },
   onShareAppMessage(e) {
-    console.log(e);
     return {
-      title: '答题小程序测试分享',
-      path: '/pages/cover/cover'
+      title: '答题竞猜？比比看吧！',
+      path: '/pages/index/index'
     };
   },
   onShow() {
