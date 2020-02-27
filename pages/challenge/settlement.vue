@@ -82,6 +82,7 @@ export default {
       'settlementInfo'
     ]),
     challengeStatus() {
+      // 从后端获取输赢，逃跑算对方赢
       const { type } = this.settlementInfo;
       if (type === 1) {
         return 'success';
@@ -106,6 +107,7 @@ export default {
     this.isRun();
   },
   methods: {
+    // 对手逃跑有提示
     isRun() {
       const { run } = this.settlementInfo;
       if (run) {
@@ -124,9 +126,7 @@ export default {
       });
     },
     handleReview() {
-      uni.redirectTo({
-        url: '/pages/review/review'
-      });
+      this.$emit('review');
     }
   }
 };
