@@ -83,9 +83,7 @@ export default {
         success: res => {
           // 获取code
           this.code = res.code;
-          // console.log('code_login:' + res.code);
-          // this.getUserInfo()
-          this.getUserInfo();
+          this.checkUserSetting();
         }
       });
     },
@@ -102,11 +100,10 @@ export default {
       console.log(data);
       this.modalname = 'noregister';
     },
-    getUserInfo() {
+    // 检查用户授权设置
+    checkUserSetting() {
       uni.getSetting({
         success: res => {
-          console.log(res);
-
           if (res.authSetting['scope.userInfo']) {
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称
             this.isresolve = true;
