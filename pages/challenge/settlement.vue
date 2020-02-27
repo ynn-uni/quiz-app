@@ -82,11 +82,11 @@ export default {
       'settlementInfo'
     ]),
     challengeStatus() {
-      const { userScore, opponentScore } = this;
-      if (userScore > opponentScore) {
+      const { type } = this.settlementInfo;
+      if (type === 1) {
         return 'success';
       }
-      if (userScore < opponentScore) {
+      if (type === 2) {
         return 'fail';
       }
       return 'draw';
@@ -102,8 +102,22 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.isRun();
+  },
   methods: {
+    isRun() {
+      const { run } = this.settlementInfo;
+      if (run) {
+        setTimeout(() => {
+          uni.showModal({
+            title: '恭喜获得胜利！',
+            content: '您的对手已逃跑',
+            showCancel: false
+          });
+        }, 200);
+      }
+    },
     reChallenge() {
       uni.redirectTo({
         url: '/pages/challenge/challenge'
