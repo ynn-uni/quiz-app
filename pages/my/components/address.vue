@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {setUserInfo} from '../../../apis'
 	export default {
 		data() {
 			return {
@@ -28,10 +29,34 @@
 				address:null
 			}
 		},
-		
+		// /User/setUserInfo
 		methods: {
 			save(){
 				console.log(this.name,this.phone,this.address)
+				if(this.name&&this.phone&&this.address){
+					setUserInfo({
+						truename:this.name,
+						mobile:this.phone,
+						address:this.address
+					}).then((res)=>{
+						console.log(res)
+						if(res.status==200){
+								uni.showToast({
+									title: '成功',
+									icon: 'none'
+							});
+						}else{
+							uni.showToast({
+									title: '失败',
+									icon: 'none'
+							});
+						}
+					})
+				}else{
+					uni.showModal({
+						title:"请填完基本信息"
+					})
+				}
 			}
 		}
 	}

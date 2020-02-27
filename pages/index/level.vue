@@ -87,6 +87,7 @@ $bg-label: #7f41c1;
       font-size: 36rpx;
       font-weight: 500;
       z-index: 2;
+      line-height: 40rpx;
       .label {
         margin-top: 12rpx;
         font-size: 28rpx;

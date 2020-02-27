@@ -37,7 +37,10 @@
 						</view>
 						<view class="right flex align-center">
 							<image src="../../static/images/gem.png" mode=""></image>
-							{{item.sum}}
+							<view class="num">
+								{{item.sum}}
+							</view>
+							
 						</view>
 						
 					</view>
@@ -153,9 +156,14 @@ import { getScoreRankingList } from '../../apis';
 						.info{
 							width: 200rpx;
 							.name{
+								text-align: center;
+								width: 200rpx;
 								font-size:24rpx;
 								font-weight:500;
 								color:rgba(95,2,152,1);
+								overflow:hidden;
+								white-space: nowrap;
+								text-overflow: ellipsis;
 							}
 							.my_class{
 								margin-top: 8rpx;
@@ -174,6 +182,9 @@ import { getScoreRankingList } from '../../apis';
 							width: 30rpx;
 							height: 36rpx;
 							margin-right: 10rpx;
+						}
+						.num{
+							width: 80rpx;
 						}
 					}
 				}

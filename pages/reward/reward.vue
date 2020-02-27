@@ -1,5 +1,5 @@
 <template>
-	<view class="bg-linear">
+	<view class="bg-linear rew">
 		<cu-custom :isBack="true">
 			<block slot="backText">返回</block>
 			<block slot="content">奖励</block>
@@ -25,7 +25,7 @@
 					</view>
 					1、每24小时在排名前200名中随机抽取20名获奖者，免费赠送十只口罩。
 					<br>
-					2、凑齐10只口罩可联系客服兑换，寄送（不满十只也可兑换，邮费自理。
+					2、获奖的用户请在首页点击头像进入“个人资料”编辑收货信息，方便工作人员及时与您联系。
 					<br>
 					3、本活动最终归释权属活动方所有。
 				</view>
@@ -73,7 +73,7 @@
 			 let info = uni.createSelectorQuery();
 			 var height=0;
 			 var top=0;
-			 info.select(".reward").boundingClientRect(function(data) { //data - 各种参数
+			 info.select(".rew").boundingClientRect(function(data) { //data - 各种参数
 			 // 　console.log(data.height,data.top) 
 				height=data.height
 				top=data.top
@@ -98,11 +98,14 @@
 </script>
 
 <style scoped lang="scss">
+.rew{
+	position: fixed;
+	top: 0rpx;
+	bottom: 40rpx;
+}
 .reward{
 	width: 750rpx;
-	position: fixed;
-	top: 120rpx;
-	bottom: 40rpx;
+	
 	.reward_img{
 		image{
 			width: 244rpx;

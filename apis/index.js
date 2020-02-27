@@ -30,3 +30,6 @@ export function getLotteryUserList(data = {}) {
 export function getLotteryList(data = {}) {
   return getAction('/Lottery/getLotteryList', data);
 }
+export function setUserInfo(data = {}) {
+  return postAction('/User/setUserInfo', data);
+}
