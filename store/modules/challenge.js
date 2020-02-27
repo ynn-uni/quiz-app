@@ -36,7 +36,8 @@ export default {
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
           // url: 'ws://mahy-mac.local:8888/',
-          url: 'ws://192.168.1.65:9502/Battle',
+          // url: 'ws://192.168.1.65:9502/Battle',
+          url: 'ws://47.107.151.209:9802/Battle',
           header: {
             Authorization: rootState.user.token
           }
