@@ -6,7 +6,7 @@
         <block slot="content">竞猜答题</block>
       </cu-custom>
       <!-- <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button> -->
-      <index-header :isLogin="token != null" @onlogin="showAuthModal"></index-header>
+      <index-header @nologin="showAuthModal"></index-header>
       <user-level></user-level>
       <view class="index-bottom flex flex-direction justify-center flex-sub">
         <view class="index-brand margin-bottom-lg">
@@ -95,15 +95,7 @@ export default {
         }
       });
     },
-    ShowChild: function(data) {
-      console.log(data);
-      this.modalname = null;
-      if (data === '授权成功') {
-        this.isresolve = true;
-
-        this.getWxUserInfo();
-      }
-    },
+    
     showAuthModal() {
       this.$refs.modal.show();
     },
@@ -137,6 +129,7 @@ export default {
             iv: res.iv,
             encryptedData: res.encryptedData
           }).then(res => {
+			  
             this.$store.commit('user/updateToken', res.data.token);
             this.fatchUserInfoByToken();
           });

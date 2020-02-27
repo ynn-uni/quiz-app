@@ -16,10 +16,8 @@
       </view>
     </view>
     <view class="user-info">
-      <view class="avatar">
-        <navigator url="/pages/my/my">
-          <open-data type="userAvatarUrl"></open-data>
-        </navigator>
+      <view class="avatar" @click="checkIsLogin('/pages/my/my')">
+         <open-data type="userAvatarUrl" ></open-data>
       </view>
       <view class="nickname">
         <open-data type="userNickName"></open-data>
@@ -45,7 +43,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo','token'])
   },
   onShareAppMessage(e) {
     return {
@@ -55,12 +53,13 @@ export default {
   },
   methods: {
     checkIsLogin(url) {
-      if (this.userInfo) {
+		console.log(this.token)
+      if (this.token) {
         uni.navigateTo({
           url: url
         });
       } else {
-        this.$emit('ListenChild1');
+        this.$emit('nologin');
       }
     }
   }
