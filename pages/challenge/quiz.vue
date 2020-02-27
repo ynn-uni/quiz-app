@@ -30,9 +30,8 @@ export default {
   components: { UserPannel, Subject },
   data() {
     return {
-      limitTime: 10,
-      subjectList: this.subjectList,
-      countNum: 10,
+      limitTime: 2,
+      countNum: 2,
       timerId: null,
       scoreAnim: false,
       curScore: 0,
@@ -43,11 +42,6 @@ export default {
   },
   computed: {
     ...mapGetters(['userScore', 'opponentScore'])
-  },
-  watch: {
-    timerId(val) {
-      console.log('id', val);
-    }
   },
   mounted() {
     this.start();

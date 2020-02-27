@@ -56,9 +56,7 @@ class WebSocketUtils {
       this.socketTask = uni.connectSocket({
         url,
         header,
-        complete: () => {
-          // console.warn('websocket open')
-        }
+        complete: () => {}
       });
       this.initEventHandle();
     } catch (e) {
@@ -111,7 +109,7 @@ class WebSocketUtils {
         operate: 'PING',
         data: pingMsg
       });
-      console.log('send -> ', pingMsg);
+      console.warn('send -> ', pingMsg);
 
       // 如果超过一定时间还没重置，说明后端主动断开了
       this.pongTimeoutId = setTimeout(() => {
