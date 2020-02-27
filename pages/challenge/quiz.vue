@@ -5,6 +5,7 @@
       ref="subject"
       type="pk"
       :list="questions"
+      :show-answer="showAnswer"
       @select="onUserSelect"
       @finish="handleFinish"
     ></subject>
@@ -36,7 +37,8 @@ export default {
       scoreAnim: false,
       curScore: 0,
       finished: false,
-      nextFlag: false
+      nextFlag: false,
+      showAnswer: false
     };
   },
   computed: {
@@ -73,11 +75,13 @@ export default {
     },
     nextQuestion() {
       if (this.finished) return;
+      this.showAnswer = true;
       if (this.nextFlag === true) {
         setTimeout(() => {
           this.$refs.subject.turnToNext();
           this.reset();
           this.nextFlag = false;
+          this.showAnswer = false;
         }, 1500);
       } else {
         this.nextFlag = true;

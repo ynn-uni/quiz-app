@@ -54,6 +54,10 @@ export default {
     delay: {
       type: Number,
       default: 800
+    },
+    showAnswer: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -77,6 +81,20 @@ export default {
       } else {
         return false;
       }
+    },
+    checkIconColor() {
+      let flag = false;
+      if (
+        // 用户选择错误，或需要显示答案时
+        this.isRight === false ||
+        // 用户未选择，且需要显示答案时
+        (this.isRight == null && this.showAnswer) ||
+        // 用户未选择，且是回顾时
+        (this.type === 'review' && this.isRight === null)
+      ) {
+        flag = true;
+      }
+      return `color: ${flag ? '#F38B00' : '#fff'}`;
     }
   },
   methods: {
