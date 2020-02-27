@@ -1,29 +1,22 @@
 <template>
-  <view
-    class="cu-modal"
-    :class="modalname=='noregister'?'show':modalname=='DialogModal2'?'show':modalname=='DialogModal4'?'show':''"
-  >
+  <view class="cu-modal" :class="showModal ? 'show' : ''">
     <view class="cu-dialog">
       <view class="cu-bar bg-white justify-end">
-        <view class="content">提示</view>
-        <view class="action" @tap="hideModal">
+        <view class="content">您还未登录</view>
+        <view class="action" @tap="handleCancel">
           <text class="cuIcon-close text-red"></text>
         </view>
       </view>
-      <view
-        class="padding-xl"
-      >{{modalname=='noregister'?'获取微信授权?':modalname=='DialogModal2'?'确定删除该设备？':modalname=='DialogModal4'?'获取手机授权?':''}}</view>
+      <view class="padding-xl">'请先登录后在进行操作！'</view>
       <view class="cu-bar bg-white justify-end">
         <view class="action">
-          <button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-          <!-- 弹出授权框 -->
+          <button class="cu-btn line-green text-green" @tap="handleCancel">暂不登录</button>
           <button
             class="cu-btn bg-green margin-left"
             open-type="getUserInfo"
             @getuserinfo="getUserInfo"
-            @click="makesure"
-            v-if="modalname=='noregister'"
-          >确定</button>
+            @click="handleConfirm"
+          >立即登录</button>
         </view>
       </view>
     </view>
@@ -34,33 +27,26 @@
 export default {
   data() {
     return {
-      iv: '',
-      encryptedData: ''
+      showModal: false
     };
   },
-  props: {
-    modalname: ''
-  },
-
   methods: {
-    getUserInfo() {
-      uni.getSetting({
-        success: res => {
-          console.log(res);
-
-          if (res.authSetting['scope.userInfo']) {
-            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-            this.$emit('ListenChild', '授权成功');
-          }
-        }
-      });
-      // this.$emit('ListenChild', '授权成功');
+    show() {
+      this.showModal = true;
     },
-    makesure() {
-      this.$emit('ListenChild', '点击确认');
+    close() {
+      this.showModal = false;
     },
-    hideModal(e) {
-      this.$emit('ListenChild', '点击取消');
+    getUserInfo(evt) {
+      this.handleConfirm();
+    },
+    handleConfirm() {
+      this.close();
+      this.$emit('confirm');
+    },
+    handleCancel(e) {
+      this.close();
+      this.$emit('cancel');
     }
   }
 };
