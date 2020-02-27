@@ -5,7 +5,8 @@
       <cu-custom>
         <block slot="content">竞猜答题</block>
       </cu-custom>
-      <index-header v-on:ListenChild1="checkUserLogin"></index-header>
+      <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button>
+      <index-header :isLogin="token != null" @onlogin="showAuthModal"></index-header>
       <user-level></user-level>
       <view class="index-bottom flex flex-direction justify-center flex-sub">
         <view class="index-brand margin-bottom-lg">
@@ -34,7 +35,7 @@
         </view>-->
       </view>
 
-      <ModelLogin v-on:ListenChild="ShowChild" :modalname="modalname"></ModelLogin>
+      <ModelLogin ref="modal" @confirm="getWxUserInfo"></ModelLogin>
     </view>
   </view>
 </template>
@@ -44,6 +45,7 @@ import IndexHeader from './header.vue';
 import UserLevel from './level.vue';
 import { loginOrRegister, getUserInfoApi } from '../../apis';
 import ModelLogin from '../../components/modelLogin.vue';
+import { mapGetters } from 'vuex';
 export default {
   components: { IndexHeader, UserLevel, ModelLogin },
   data() {
@@ -54,6 +56,9 @@ export default {
       isresolve: null,
       modalname: null
     };
+  },
+  computed: {
+    ...mapGetters(['token'])
   },
   onShareAppMessage(e) {
     return {
@@ -66,6 +71,8 @@ export default {
   },
   methods: {
     handleModeSelect(evt) {
+      if (!this.checkUserLogin()) return;
+
       this.selectedMode = evt;
       setTimeout(() => {
         this.turnToPage();
@@ -97,9 +104,15 @@ export default {
         this.getWxUserInfo();
       }
     },
+    showAuthModal() {
+      this.$refs.modal.show();
+    },
     checkUserLogin: function(data) {
-      console.log(data);
-      this.modalname = 'noregister';
+      if (!this.token) {
+        this.showAuthModal();
+        return false;
+      }
+      return true;
     },
     // 检查用户授权设置
     checkUserSetting() {
