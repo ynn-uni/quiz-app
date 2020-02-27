@@ -1,29 +1,41 @@
 <template>
-	<view class="index-page bg-linear">
-		<image class="index-bg" src="../../static/images/index-bg.png"></image>
-		<view class="index-content">
-			<cu-custom><block slot="content">竞猜答题</block></cu-custom>
-			<index-header v-on:ListenChild1="checkUserLogin"></index-header>
-			<user-level></user-level>
-			<view class="index-bottom flex flex-direction justify-around flex-sub">
-				<view class="index-brand"><image src="../../static/images/brand.png"></image></view>
-				<view class="index-mode flex justify-between">
-					<view class="index-mode-item margin-top" @click="handleClick('exercise')">
-						<image src="../../static/images/exercise.png"></image>
-						<image v-if="selectedMode === 'exercise'" class="index-mode-mask" src="../../static/images/mode-mask.png"></image>
-					</view>
-					<view class="index-mode-item">
-						<image src="../../static/images/challenge.png" @click="handleClick('challenge')"></image>
-						<image v-if="selectedMode === 'challenge'" class="index-mode-mask" src="../../static/images/mode-mask.png"></image>
-					</view>
-				</view>
-				<view class="index-go" hover-class="btn-hover-trans">
-					<image class="btn-image" src="../../static/images/start.png" @click="turnToPage"></image>
-				</view>
-			</view>
-			<ModelLogin v-on:ListenChild="ShowChild" :modalname="modalname"></ModelLogin>
-		</view>
-	</view>
+  <view class="index-page bg-linear">
+    <image class="index-bg" src="../../static/images/index-bg.png" />
+    <view class="index-content">
+      <cu-custom>
+        <block slot="content">竞猜答题</block>
+      </cu-custom>
+      <index-header v-on:ListenChild1="checkUserLogin"></index-header>
+      <user-level></user-level>
+      <view class="index-bottom flex flex-direction justify-around flex-sub">
+        <view class="index-brand">
+          <image src="../../static/images/brand.png" />
+        </view>
+        <view class="index-mode flex justify-between">
+          <view class="index-mode-item margin-top" @click="handleClick('exercise')">
+            <image src="../../static/images/exercise.png" />
+            <image
+              v-if="selectedMode === 'exercise'"
+              class="index-mode-mask"
+              src="../../static/images/mode-mask.png"
+            />
+          </view>
+          <view class="index-mode-item">
+            <image src="../../static/images/challenge.png" @click="handleClick('challenge')" />
+            <image
+              v-if="selectedMode === 'challenge'"
+              class="index-mode-mask"
+              src="../../static/images/mode-mask.png"
+            />
+          </view>
+        </view>
+        <view class="index-go" hover-class="btn-hover-trans">
+          <image class="btn-image" src="../../static/images/start.png" @click="turnToPage" />
+        </view>
+      </view>
+      <ModelLogin v-on:ListenChild="ShowChild" :modalname="modalname"></ModelLogin>
+    </view>
+  </view>
 </template>
 
 <script>
@@ -32,42 +44,42 @@ import UserLevel from './level.vue';
 import { loginOrRegister, getUserInfoApi } from '../../apis';
 import ModelLogin from '../../components/modelLogin.vue';
 export default {
-	components: { IndexHeader, UserLevel ,ModelLogin},
-	data() {
-		return {
-			selectedMode: null,
-			challengeUrl: '/pages/challenge/challenge',
-			exerciseUrl: '/pages/exercise/exercise',
-			isresolve:null,
-			modalname:null
-		};
-	},
-	onShareAppMessage(e) {
+  components: { IndexHeader, UserLevel, ModelLogin },
+  data() {
+    return {
+      selectedMode: null,
+      challengeUrl: '/pages/challenge/challenge',
+      exerciseUrl: '/pages/exercise/exercise',
+      isresolve: null,
+      modalname: null
+    };
+  },
+  onShareAppMessage(e) {
     console.log(e);
     return {
       title: '答题小程序测试分享',
       path: '/pages/cover/cover'
     };
-	},
-	 onShow() {
+  },
+  onShow() {
     this.wxLogin();
   },
-	methods: {
-		handleClick(evt) {
-			this.selectedMode = evt;
-			// setTimeout(() => {
-			// 	this.turnToPage()
-			// }, 0)
-		},
-		turnToPage() {
-			const urlKey = this.selectedMode + 'Url'
-			uni.navigateTo({
-    		url: this[urlKey]
-			})
-		},
+  methods: {
+    handleClick(evt) {
+      this.selectedMode = evt;
+      // setTimeout(() => {
+      // 	this.turnToPage()
+      // }, 0)
+    },
+    turnToPage() {
+      const urlKey = this.selectedMode + 'Url';
+      uni.navigateTo({
+        url: this[urlKey]
+      });
+    },
 
-	//登陆相关
-	 wxLogin() {
+    //登陆相关
+    wxLogin() {
       uni.login({
         success: res => {
           // 获取code
@@ -77,8 +89,8 @@ export default {
           this.getUserInfo();
         }
       });
-		},
-		ShowChild: function(data) {
+    },
+    ShowChild: function(data) {
       console.log(data);
       this.modalname = null;
       if (data === '授权成功') {
@@ -87,10 +99,9 @@ export default {
         this.userInfoApi();
       }
     },
-    checkUserLogin:function(data) {
-      console.log(data)
-        this.modalname = 'noregister';
-      
+    checkUserLogin: function(data) {
+      console.log(data);
+      this.modalname = 'noregister';
     },
     getUserInfo() {
       uni.getSetting({
@@ -132,10 +143,10 @@ export default {
                 score,
                 sex,
                 streak,
-								train,
-								today_rank,
-								today_score,
-								experience
+                train,
+                today_rank,
+                today_score,
+                experience
               } = res.data;
               const userinfo = {
                 name: nickname,
@@ -147,10 +158,10 @@ export default {
                 defeat, //败场
                 id,
                 sex,
-								train,
-								today_rank,
-								today_score,
-								experience
+                train,
+                today_rank,
+                today_score,
+                experience
               };
               this.$store.commit('user/updateUserInfo', userinfo);
               // uni.navigateTo({
@@ -160,64 +171,64 @@ export default {
           });
         }
       });
-		}
-	}
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .index-page {
-	position: relative;
-	.index-bg {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		height: 850rpx;
-	}
-	@at-root.index-content {
-		z-index: 2;
-		.index-bottom {
-			position: absolute;
-			top: 600rpx;
-			bottom: 0;
-			left: 0;
-			right: 0;
-		}
-		.index-brand {
-			margin-top: 20rpx;
-			text-align: center;
-			image {
-				width: 400rpx;
-				height: 160rpx;
-			}
-		}
+  position: relative;
+  .index-bg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 850rpx;
+  }
+  @at-root.index-content {
+    z-index: 2;
+    .index-bottom {
+      position: absolute;
+      top: 600rpx;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .index-brand {
+      margin-top: 20rpx;
+      text-align: center;
+      image {
+        width: 400rpx;
+        height: 160rpx;
+      }
+    }
 
-		.index-mode {
-			padding: 0 80rpx;
-			.index-mode-item {
-				position: relative;
-				width: 275rpx;
-				height: 320rpx;
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-			.index-mode-mask {
-				position: absolute;
-				top: 0;
-				left: 0;
-				z-index: 10;
-			}
-		}
-		.index-go {
-			padding-bottom: 20rpx;
-			text-align: center;
-			image {
-				width: 320rpx;
-				height: 120rpx;
-			}
-		}
-	}
+    .index-mode {
+      padding: 0 80rpx;
+      .index-mode-item {
+        position: relative;
+        width: 275rpx;
+        height: 320rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .index-mode-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+    }
+    .index-go {
+      padding-bottom: 20rpx;
+      text-align: center;
+      image {
+        width: 320rpx;
+        height: 120rpx;
+      }
+    }
+  }
 }
 </style>
