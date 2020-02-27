@@ -7,19 +7,14 @@
           <view class="label">分享</view>
         </button>
       </view>
-      <view
-        class="flex flex-direction margin-top-sm"
-        @click="checkIsLogin('/pages/ranking/ranking')"
-      >
+      <view class="flex flex-direction margin-top-sm" @click="checkLogin('/pages/ranking/ranking')">
         <image src="../../static/images/board.png" />
         <view class="label">排行榜</view>
       </view>
     </view>
-    <view class="user-info">
+    <view class="user-info" @click="checkLogin('/pages/my/my')">
       <view class="avatar">
-        <navigator url="/pages/my/my">
-          <open-data type="userAvatarUrl"></open-data>
-        </navigator>
+        <open-data type="userAvatarUrl"></open-data>
       </view>
       <view class="nickname">
         <open-data type="userNickName"></open-data>
@@ -30,7 +25,7 @@
         <image src="../../static/images/rule.png" />
         <view class="label">规则</view>
       </navigator>
-      <view class="flex flex-direction margin-top-sm" @click="checkIsLogin('/pages/reward/reward')">
+      <view class="flex flex-direction margin-top-sm" @click="checkLogin('/pages/reward/reward')">
         <image src="../../static/images/reward.png" />
         <view class="label">奖励</view>
       </view>
@@ -45,7 +40,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'token'])
   },
   onShareAppMessage(e) {
     return {
@@ -54,14 +49,14 @@ export default {
     };
   },
   methods: {
-    checkIsLogin(url) {
-      if (this.userInfo) {
-        uni.navigateTo({
-          url: url
-        });
-      } else {
-        this.$emit('ListenChild1');
+    checkLogin(url) {
+      if (!this.token) {
+        this.$emit('nologin');
+        return;
       }
+      uni.navigateTo({
+        url: url
+      });
     }
   }
 };
