@@ -69,13 +69,14 @@ export default {
     },
     nextQuestion() {
       if (this.finished) return;
-      this.showAnswer = true;
+      // TODO 多个方法会同时触发 showAnswer
+      // this.showAnswer = true;
       if (this.nextFlag === true) {
         setTimeout(() => {
           this.$refs.subject.turnToNext();
           this.reset();
           this.nextFlag = false;
-          this.showAnswer = false;
+          // this.showAnswer = false;
         }, 1500);
       } else {
         this.nextFlag = true;
