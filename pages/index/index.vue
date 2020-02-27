@@ -125,50 +125,45 @@ export default {
             iv: res.iv,
             encryptedData: res.encryptedData
           }).then(res => {
-            console.log(res);
             this.$store.commit('user/updateToken', res.data.token);
-            // console.log(res);
-            getUserInfoApi().then(res => {
-              console.log(res);
-              // console.log(this.$store);
-              //
-              const {
-                battle,
-                defeat,
-                id,
-                level,
-                nickname,
-                portrait,
-                score,
-                sex,
-                streak,
-                train,
-                today_rank,
-                today_score,
-                experience
-              } = res.data;
-              const userinfo = {
-                name: nickname,
-                avatar: portrait,
-                level: level,
-                victory: streak, //胜场
-                credit: score, // 积分
-                battle,
-                defeat, //败场
-                id,
-                sex,
-                train,
-                today_rank,
-                today_score,
-                experience
-              };
-              this.$store.commit('user/updateUserInfo', userinfo);
-              // uni.navigateTo({
-              //   url: '/pages/index/index'
-              // });
-            });
+            this.fatchUserInfoByToken();
           });
         }
+      });
+    },
+    fatchUserInfoByToken() {
+      getUserInfoApi().then(res => {
+        const {
+          battle,
+          defeat,
+          id,
+          level,
+          nickname,
+          portrait,
+          score,
+          sex,
+          streak,
+          train,
+          today_rank,
+          today_score,
+          experience
+        } = res.data;
+        const userinfo = {
+          name: nickname,
+          avatar: portrait,
+          level: level,
+          victory: streak, //胜场
+          credit: score, // 积分
+          battle,
+          defeat, //败场
+          id,
+          sex,
+          train,
+          today_rank,
+          today_score,
+          experience
+        };
+        this.$store.commit('user/updateUserInfo', userinfo);
       });
     }
   }
