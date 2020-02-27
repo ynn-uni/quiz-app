@@ -15,7 +15,7 @@
         >
           <text
             v-if="item.id === curQuestion.answer"
-            :style="{ color: isRight === false ? '#F38B00' : '#fff' }"
+            :style="checkIconColor"
             class="status cuIcon-check text-orange"
           ></text>
           <text v-if="item.id !== curQuestion.answer" class="status cuIcon-close"></text>
@@ -23,15 +23,35 @@
         </button>
       </view>
     </view>
-    <view v-if="type === 'review'" class="action">
-      <button class="next-btn cu-btn round bg-orange text-white" @click="turnToNext">下一题</button>
-      <button class="next-btn cu-btn round text-purple" @click="turnToPrev">上一题</button>
-      <navigator class="text-white text-lg" url="/pages/index/index">继续挑战</navigator>
+    <view class="action" v-if="type === 'review'">
+      <button
+        v-if="currentIndex < list.length - 1"
+        class="action-btn cu-btn round bg-orange text-white"
+        @click="turnToNext"
+      >下一题</button>
+      <button
+        v-if="currentIndex > 0"
+        class="action-btn cu-btn round text-purple"
+        @click="turnToPrev"
+      >上一题</button>
+      <navigator
+        v-if="type === 'review'"
+        class="text-white text-lg"
+        url="/pages/challenge/challenge"
+        open-type="redirect"
+      >继续挑战</navigator>
     </view>
-    <view v-if="type === 'exercise' && selectOptionId" class="action">
-      <button class="next-btn cu-btn round bg-orange text-white" @click="turnToNext">下一题</button>
-      <button class="next-btn cu-btn round text-purple" @click="turnToPrev">上一题</button>
-      <navigator class="text-white text-lg" url="/pages/index/index">返回首页</navigator>
+    <view class="action" v-if="type === 'exercise' && selectOptionId != null">
+      <button
+        v-if="currentIndex < list.length - 1"
+        class="action-btn cu-btn round bg-orange text-white"
+        @click="turnToNext"
+      >下一题</button>
+      <button
+        v-if="currentIndex ===list.length - 1 && type === 'exercise'"
+        class="action-btn cu-btn round bg-orange text-white"
+        @click="handlerFinish"
+      >完成练习</button>
     </view>
   </view>
 </template>
@@ -97,16 +117,28 @@ export default {
       return `color: ${flag ? '#F38B00' : '#fff'}`;
     }
   },
+  watch: {
+    currentIndex: {
+      immediate: true,
+      handler() {
+        // 当回顾时，显示用户的选项
+        if (this.type === 'review') {
+          const selected = this.curQuestion.selected;
+          this.selectOptionId = selected ? selected : null;
+        }
+      }
+    }
+  },
   methods: {
     handleSelect(evt) {
       if (this.selectOptionId != null || this.type === 'review') return;
       this.selectOptionId = evt;
-      this.curQuestion.selected = evt;
       this.$emit('select', this.isRight);
-      // this.$emit('select', {
-      //   isRight: this.isRight,
-      //   selected: evt
-      // });
+      // hack，在此时将用户选择的选项更新到问题列表中
+      if (this.type === 'pk') {
+        this.curQuestion.selected = evt;
+        this.$store.commit('challenge/updateQuestionList', this.list);
+      }
     },
     turnToNext(delay = 0) {
       setTimeout(() => {
@@ -122,12 +154,15 @@ export default {
     },
     changeIndex(step) {
       const length = this.list.length;
-      if (this.currentIndex + 1 < length) {
+      if (this.currentIndex + step < length) {
         this.currentIndex += step;
       } else {
         // 所有问题都答完
-        this.$emit('finish');
+        this.handlerFinish();
       }
+    },
+    handlerFinish() {
+      this.$emit('finish');
     }
   }
 };
@@ -164,8 +199,11 @@ export default {
     align-items: center;
     justify-content: space-around;
     margin-top: 100rpx;
-    .next-btn {
+    .action-btn {
       margin: 30rpx 0;
+    }
+    navigator {
+      margin-top: 20rpx;
     }
   }
 
