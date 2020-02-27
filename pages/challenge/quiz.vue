@@ -5,6 +5,7 @@
       ref="subject"
       type="pk"
       :list="questions"
+      :show-answer="showAnswer"
       @select="onUserSelect"
       @finish="handleFinish"
     ></subject>
@@ -30,22 +31,17 @@ export default {
   data() {
     return {
       limitTime: 10,
-      subjectList: this.subjectList,
       countNum: 10,
       timerId: null,
       scoreAnim: false,
       curScore: 0,
       finished: false,
-      nextFlag: false
+      nextFlag: false,
+      showAnswer: false
     };
   },
   computed: {
     ...mapGetters(['userScore', 'opponentScore'])
-  },
-  watch: {
-    timerId(val) {
-      console.log('id', val);
-    }
   },
   mounted() {
     this.start();
@@ -64,8 +60,8 @@ export default {
       this.calcScore(false);
       this.nextQuestion();
     },
-    calcScore(rightAnsower) {
-      const score = rightAnsower ? this.countNum * 10 : 0;
+    calcScore(rightAnswer) {
+      const score = rightAnswer ? this.countNum * 10 : 0;
       this.curScore = score;
       this.scoreAnim = true;
       this.$store.commit('challenge/updateUserScore', this.userScore + score);
@@ -73,11 +69,13 @@ export default {
     },
     nextQuestion() {
       if (this.finished) return;
+      this.showAnswer = true;
       if (this.nextFlag === true) {
         setTimeout(() => {
           this.$refs.subject.turnToNext();
           this.reset();
           this.nextFlag = false;
+          this.showAnswer = false;
         }, 1500);
       } else {
         this.nextFlag = true;

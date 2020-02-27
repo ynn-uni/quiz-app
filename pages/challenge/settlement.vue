@@ -82,11 +82,12 @@ export default {
       'settlementInfo'
     ]),
     challengeStatus() {
-      const { userScore, opponentScore } = this;
-      if (userScore > opponentScore) {
+      // 从后端获取输赢，逃跑算对方赢
+      const { type } = this.settlementInfo;
+      if (type === 1) {
         return 'success';
       }
-      if (userScore < opponentScore) {
+      if (type === 2) {
         return 'fail';
       }
       return 'draw';
@@ -102,17 +103,30 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.isRun();
+  },
   methods: {
+    // 对手逃跑有提示
+    isRun() {
+      const { run } = this.settlementInfo;
+      if (run) {
+        setTimeout(() => {
+          uni.showModal({
+            title: '恭喜获得胜利！',
+            content: '您的对手已逃跑',
+            showCancel: false
+          });
+        }, 200);
+      }
+    },
     reChallenge() {
       uni.redirectTo({
         url: '/pages/challenge/challenge'
       });
     },
     handleReview() {
-      uni.redirectTo({
-        url: '/pages/review/review'
-      });
+      this.$emit('review');
     }
   }
 };

@@ -7,7 +7,8 @@
     <matching v-if="isDisplay('MATCH')" :user="userInfo"></matching>
     <ready v-if="isDisplay('READY')" :user="userInfo" :opponent="opponentInfo"></ready>
     <quiz v-if="isDisplay('QUIZ') && questionList.length" ref="quiz" :questions="questionList"></quiz>
-    <settlement v-if="isDisplay('OVER')"></settlement>
+    <settlement v-if="isDisplay('OVER')" @review="handleReview"></settlement>
+    <review v-if="isDisplay('REVIEW')"></review>
   </view>
 </template>
 
@@ -16,13 +17,14 @@ import Matching from './matching';
 import Ready from './ready';
 import Quiz from './quiz.vue';
 import Settlement from './settlement';
+import Review from './review';
 import WebsocketUtils from '@/utils/websocket';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
-  components: { Matching, Ready, Quiz, Settlement },
+  components: { Matching, Ready, Quiz, Settlement, Review },
   data() {
     return {
-      statusMap: ['CONNECTED', 'MATCH', 'READY', 'QUIZ', 'OVER'],
+      statusMap: ['CONNECTED', 'MATCH', 'READY', 'QUIZ', 'OVER', 'REVIEW'],
       statusIndex: 0
     };
   },
@@ -51,6 +53,9 @@ export default {
       const { statusIndex, statusMap } = this;
       const curStatus = statusMap[statusIndex];
       return curStatus === step;
+    },
+    handleReview() {
+      this.statusIndex = 5;
     },
     // 监听socket事件
     onSocketMessage(evt) {

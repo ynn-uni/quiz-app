@@ -1,20 +1,17 @@
 <template>
   <view class="bg-linear">
-    <cu-custom :isBack="true">
-      <block slot="backText">返回</block>
-      <block slot="content">挑战回顾</block>
-    </cu-custom>
-    <user-pannel :self="userInfo" />
+    <user-pannel ref="pannel" />
     <subject ref="subject" type="review" :list="questionList" @finish="handleFinish"></subject>
   </view>
 </template>
 
 <script>
+import UserPannel from '../../components/user-pannel';
 import Subject from '../../components/subject';
 import { mapGetters } from 'vuex';
 export default {
   name: 'Review',
-  components: { Subject },
+  components: { UserPannel, Subject },
   data() {
     return {};
   },
