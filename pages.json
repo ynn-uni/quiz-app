@@ -29,12 +29,6 @@
       }
     },
     {
-      "path": "pages/review/review",
-      "style": {
-        "navigationBarTitleText": "挑战回顾"
-      }
-    },
-    {
       "path": "pages/ranking/ranking",
       "style": {
         "navigationBarTitleText": "排行榜"
