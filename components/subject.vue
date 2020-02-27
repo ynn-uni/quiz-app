@@ -1,10 +1,10 @@
 <template>
   <view class="subject" :style="{'margin-top': type === 'pk' ? '180rpx': '100rpx'}">
     <view class="title padding-lr">
-      <text>{{`(${currentIndex + 1}/${list.length})`}} {{ question.title }}</text>
+      <text>{{`(${currentIndex + 1}/${list.length})`}} {{ curQuestion.title }}</text>
     </view>
     <view class="options">
-      <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
+      <view class="option-item margin-top" v-for="item in curQuestion.options" :key="item.id">
         <button
           :class="[
 						'cu-btn round text-purple bg-white',
@@ -14,11 +14,11 @@
           @click="handleSelect(item.id)"
         >
           <text
-            v-if="item.id === question.answer"
+            v-if="item.id === curQuestion.answer"
             :style="{ color: isRight === false ? '#F38B00' : '#fff' }"
             class="status cuIcon-check text-orange"
           ></text>
-          <text v-if="item.id !== question.answer" class="status cuIcon-close"></text>
+          <text v-if="item.id !== curQuestion.answer" class="status cuIcon-close"></text>
           {{ item.content }}
         </button>
       </view>
@@ -63,17 +63,16 @@ export default {
     };
   },
   computed: {
-    question() {
+    curQuestion() {
       const index = this.currentIndex;
       return this.list[index];
     },
     isRight() {
-      const question = this.question;
       const id = this.selectOptionId;
       if (!id) {
         return null;
       }
-      if (id === question.answer) {
+      if (id === this.curQuestion.answer) {
         return true;
       } else {
         return false;
@@ -84,8 +83,12 @@ export default {
     handleSelect(evt) {
       if (this.selectOptionId != null || this.type === 'review') return;
       this.selectOptionId = evt;
-      const question = this.question;
+      this.curQuestion.selected = evt;
       this.$emit('select', this.isRight);
+      // this.$emit('select', {
+      //   isRight: this.isRight,
+      //   selected: evt
+      // });
     },
     turnToNext(delay = 0) {
       setTimeout(() => {
