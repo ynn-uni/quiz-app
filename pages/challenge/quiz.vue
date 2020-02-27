@@ -30,8 +30,8 @@ export default {
   components: { UserPannel, Subject },
   data() {
     return {
-      limitTime: 2,
-      countNum: 2,
+      limitTime: 10,
+      countNum: 10,
       timerId: null,
       scoreAnim: false,
       curScore: 0,
