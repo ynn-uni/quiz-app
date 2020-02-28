@@ -59,6 +59,8 @@ export default {
       this.stopCountDown();
       this.calcScore(false);
       this.nextQuestion();
+      // 当事件结束时显示答案
+      this.showAnswer = true;
     },
     calcScore(rightAnswer) {
       const score = rightAnswer ? this.countNum * 10 : 0;
@@ -69,14 +71,13 @@ export default {
     },
     nextQuestion() {
       if (this.finished) return;
-      // TODO 多个方法会同时触发 showAnswer
-      // this.showAnswer = true;
+
       if (this.nextFlag === true) {
         setTimeout(() => {
           this.$refs.subject.turnToNext();
           this.reset();
           this.nextFlag = false;
-          // this.showAnswer = false;
+          this.showAnswer = false;
         }, 1500);
       } else {
         this.nextFlag = true;
