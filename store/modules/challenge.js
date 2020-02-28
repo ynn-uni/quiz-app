@@ -1,4 +1,5 @@
 import WebsocketUtils from '../../utils/websocket';
+import { socketUrl } from '../../configs/index';
 
 export default {
   namespaced: true,
@@ -37,9 +38,7 @@ export default {
       commit('updateOpponentScore', 0);
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
-          // url: 'ws://mahy-mac.local:8888/',
-          // url: 'ws://192.168.1.65:9502/Battle',
-          url: 'ws://47.107.151.209:9802/Battle',
+          url: socketUrl,
           header: {
             Authorization: rootState.user.token
           }

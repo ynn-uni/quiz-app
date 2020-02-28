@@ -1,6 +1,6 @@
 import store from '../store';
-// const baseUrl = 'http://192.168.1.65:9501';
-const baseUrl = 'http://47.107.151.209:9801';
+import { baseUrl } from '../configs/index';
+
 export async function request(url = '', method = 'GET', data = {}, token = '') {
   return uni
     .request({
