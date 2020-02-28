@@ -12,15 +12,9 @@
         <view class="label">排行榜</view>
       </view>
     </view>
-<<<<<<< HEAD
     <view class="user-info" @click="checkLogin('/pages/my/my')">
       <view class="avatar">
         <open-data type="userAvatarUrl"></open-data>
-=======
-    <view class="user-info">
-      <view class="avatar" @click="checkIsLogin('/pages/my/my')">
-         <open-data type="userAvatarUrl" ></open-data>
->>>>>>> 0b9f047e498a1608d342829ef60a78950bc52b9b
       </view>
       <view class="nickname">
         <open-data type="userNickName"></open-data>
