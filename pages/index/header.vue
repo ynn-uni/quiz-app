@@ -45,7 +45,7 @@ export default {
   onShareAppMessage(e) {
     return {
       title: '答题竞猜？比比看吧！',
-      path: '/pages/index/index'
+      path: '/pages/cover/cover'
     };
   },
   methods: {
