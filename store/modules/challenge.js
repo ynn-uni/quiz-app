@@ -33,6 +33,8 @@ export default {
   actions: {
     initWebsocket(context) {
       const { commit, rootState } = context;
+      commit('updateUserScore', 0);
+      commit('updateOpponentScore', 0);
       return new Promise((resolve, reject) => {
         const instance = new WebsocketUtils({
           // url: 'ws://mahy-mac.local:8888/',
@@ -43,17 +45,12 @@ export default {
           }
         });
         // 每次重建连接时初始化store中的分值
-        commit('updateUserScore', 0);
-        commit('updateOpponentScore', 0);
         commit('updateSocketInstance', instance);
         resolve(instance);
       });
     },
     closeWebsocket({ state, commit }) {
       state.socketInstance.close();
-      commit('updateUserScore', 0);
-      commit('updateOpponentScore', 0);
-      commit('updateSocketInstance', null);
     },
     uploadSocre({ state }, score) {
       state.socketInstance.send({
