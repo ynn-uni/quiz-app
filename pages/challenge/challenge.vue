@@ -47,6 +47,12 @@ export default {
   onUnload: function() {
     this.closeWebsocket();
   },
+  onHide() {
+    this.closeWebsocket();
+    this.redirectTo({
+      url: '/pages/index/index'
+    });
+  },
   methods: {
     ...mapActions('challenge', ['initWebsocket', 'closeWebsocket']),
     isDisplay(step) {
