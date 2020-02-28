@@ -45,7 +45,7 @@ import IndexHeader from './header.vue';
 import UserLevel from './level.vue';
 import { loginOrRegister, getUserInfoApi } from '../../apis';
 import LoginModal from '../../components/LoginModal.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   components: { IndexHeader, UserLevel, LoginModal },
   data() {
@@ -65,7 +65,9 @@ export default {
     };
   },
   onLoad() {
-    this.wxLogin();
+    if (!this.token) {
+      this.wxLogin();
+    }
   },
   onShow() {
     if (this.token) {
@@ -73,94 +75,95 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['wxLogin', 'fatchUserInfoByToken']),
     //登陆相关
-    wxLogin() {
-      uni.login({
-        success: res => {
-          // 获取code
-          this.code = res.code;
-          this.checkUserSetting();
-        }
-      });
-    },
+    // wxLogin() {
+    //   uni.login({
+    //     success: res => {
+    //       // 获取code
+    //       this.code = res.code;
+    //       this.checkUserSetting();
+    //     }
+    //   });
+    // },
     // 检查用户授权设置
-    checkUserSetting() {
-      uni.getSetting().then(res => {
-        const [error, data] = res;
-        if (data.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          this.getWxUserInfo();
-        }
-      });
-    },
+    // checkUserSetting() {
+    //   uni.getSetting().then(res => {
+    //     const [error, data] = res;
+    //     if (data.authSetting['scope.userInfo']) {
+    //       // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+    //       this.getWxUserInfo();
+    //     }
+    //   });
+    // },
     // 获取微信的用户信息
-    getWxUserInfo() {
-      uni
-        .getUserInfo({
-          withCredentials: true
-        })
-        .then(res => {
-          const [error, data] = res;
-          if (data) {
-            const { iv, encryptedData } = data;
-            this.loginWithUserInfo(iv, encryptedData);
-          }
-        });
-    },
+    // getWxUserInfo() {
+    //   uni
+    //     .getUserInfo({
+    //       withCredentials: true
+    //     })
+    //     .then(res => {
+    //       const [error, data] = res;
+    //       if (data) {
+    //         const { iv, encryptedData } = data;
+    //         this.loginWithUserInfo(iv, encryptedData);
+    //       }
+    //     });
+    // },
     // 在后端登录或注册
-    loginWithUserInfo(iv, encryptedData) {
-      return loginOrRegister({
-        code: this.code,
-        iv: iv,
-        encryptedData: encryptedData
-      }).then(res => {
-        this.$store.commit('user/updateToken', res.data.token);
-        this.fatchUserInfoByToken();
-      });
-    },
+    // loginWithUserInfo(iv, encryptedData) {
+    //   return loginOrRegister({
+    //     code: this.code,
+    //     iv: iv,
+    //     encryptedData: encryptedData
+    //   }).then(res => {
+    //     this.$store.commit('user/updateToken', res.data.token);
+    //     this.fatchUserInfoByToken();
+    //   });
+    // },
     // 从后端获取用户信息
-    fatchUserInfoByToken() {
-      getUserInfoApi().then(res => {
-        console.log(res);
-        const {
-          battle,
-          defeat,
-          id,
-          level,
-          nickname,
-          portrait,
-          score,
-          sex,
-          streak,
-          train,
-          today_rank,
-          today_score,
-          experience,
-          address,
-          truename,
-          phone
-        } = res.data;
-        const userinfo = {
-          name: nickname,
-          avatar: portrait,
-          level: level,
-          victory: streak, //胜场
-          credit: score, // 积分
-          battle,
-          defeat, //败场
-          id,
-          sex,
-          train,
-          today_rank,
-          today_score,
-          experience,
-          address, //收货地址相关信息
-          truename,
-          phone
-        };
-        this.$store.commit('user/updateUserInfo', userinfo);
-      });
-    },
+    // fatchUserInfoByToken() {
+    //   getUserInfoApi().then(res => {
+    //     console.log(res);
+    //     const {
+    //       battle,
+    //       defeat,
+    //       id,
+    //       level,
+    //       nickname,
+    //       portrait,
+    //       score,
+    //       sex,
+    //       streak,
+    //       train,
+    //       today_rank,
+    //       today_score,
+    //       experience,
+    //       address,
+    //       truename,
+    //       phone
+    //     } = res.data;
+    //     const userinfo = {
+    //       name: nickname,
+    //       avatar: portrait,
+    //       level: level,
+    //       victory: streak, //胜场
+    //       credit: score, // 积分
+    //       battle,
+    //       defeat, //败场
+    //       id,
+    //       sex,
+    //       train,
+    //       today_rank,
+    //       today_score,
+    //       experience,
+    //       address, //收货地址相关信息
+    //       truename,
+    //       phone
+    //     };
+    //     this.$store.commit('user/updateUserInfo', userinfo);
+    //   });
+    // },
     handleModeSelect(evt) {
       if (!this.checkUserLogin()) return;
 
@@ -185,9 +188,15 @@ export default {
     },
     turnToPage() {
       const urlKey = this.selectedMode + 'Url';
-      uni.navigateTo({
-        url: this[urlKey]
-      });
+      uni
+        .navigateTo({
+          url: this[urlKey]
+        })
+        .then(() => {
+          setTimeout(() => {
+            this.selectedMode = null;
+          }, 1000);
+        });
     }
   }
 };

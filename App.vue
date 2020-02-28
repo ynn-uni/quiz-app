@@ -29,6 +29,7 @@ export default {
     });
   },
   onShow: function() {
+    this.$store.dispatch('user/wxLogin');
     console.log('App Show');
   },
   onHide: function() {
