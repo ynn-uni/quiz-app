@@ -34,20 +34,14 @@ import { mapGetters } from 'vuex';
 		// /User/setUserInfo
 		computed: {
     ...mapGetters(['userInfo'])
-  },
+  	},
 		methods: {
 			wxaddress() {
 			    const that=this
-			    const arr={}
 			    wx.getSetting({
 			      success(res) { 
 			        if (res.authSetting['scope.address']) { 
-			          wx.chooseAddress({
-			            success(res) { 
-							that.setAddressInfo(res)
-							
-			            }
-			          }) 
+			          that.save()
 			        } else {
 			          if (res.authSetting['scope.address'] == false) { 
 			            wx.openSetting({
@@ -56,47 +50,48 @@ import { mapGetters } from 'vuex';
 			              }
 			            })
 			          } else { 
-			            wx.chooseAddress({
-			              success(res) { 
-							  that.setAddressInfo(res)
-			                
-			              }
-			            })
+			            that.save()
 			          }
 			        }
 			      }
 			    })
 			},
-			 setAddressInfo(data){
+			 
+			save(){
+				var that=this;
+				 wx.chooseAddress({
+						success(res) { 
+							setUserInfo({
+								truename:res.userName,
+								mobile:res.telNumber,
+								address:res.cityName+res.countyName+res.detailInfo
+							}).then((result)=>{
+								console.log(result)
+								if(result.status==200){
+									that.setAddressInfo(res)
+										uni.showToast({
+											title: '保存成功',
+											icon: 'none'
+									});
+								}else{
+									uni.showToast({
+											title: '失败',
+											icon: 'none'
+									});
+								}
+							})
+							
+						}
+					})
+					
+				
+			},
+			setAddressInfo(data){
 				 this.userInfo.truename=data.userName
 				 this.userInfo.phone=data.telNumber
 				 this.userInfo.address=data.cityName+data.countyName+data.detailInfo
 				 
-				 this.save()
 			 },
-			save(){
-			
-				
-					setUserInfo({
-						truename:this.userInfo.truename,
-						mobile:this.userInfo.phone,
-						address:this.userInfo.address
-					}).then((res)=>{
-						console.log(res)
-						if(res.status==200){
-								uni.showToast({
-									title: '保存成功',
-									icon: 'none'
-							});
-						}else{
-							uni.showToast({
-									title: '失败',
-									icon: 'none'
-							});
-						}
-					})
-				
-			}
 		}
 	}
 </script>
