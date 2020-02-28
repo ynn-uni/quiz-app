@@ -49,7 +49,7 @@ export default {
   },
   onHide() {
     this.closeWebsocket();
-    this.redirectTo({
+    uni.redirectTo({
       url: '/pages/index/index'
     });
   },
