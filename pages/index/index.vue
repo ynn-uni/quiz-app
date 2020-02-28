@@ -4,7 +4,10 @@
     <view class="index-content">
       <cu-custom>
         <block slot="content">竞猜答题</block>
-      </cu-custom>
+      </cu-custom><<<<<<< HEAD
+      =======
+      <!-- <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button> -->
+      >>>>>>> 0b9f047e498a1608d342829ef60a78950bc52b9b
       <index-header @nologin="showAuthModal"></index-header>
       <user-level></user-level>
       <view class="index-bottom flex flex-direction justify-center flex-sub">

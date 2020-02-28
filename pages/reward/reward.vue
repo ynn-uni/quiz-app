@@ -142,7 +142,7 @@
 			width:636rpx;
 			background:rgba(215,200,243,1);
 			border-radius:12rpx;
-			font-size:24rpx;
+			font-size:26rpx;
 			font-weight:500;
 			color:rgba(255,255,255,1);
 			line-height:40rpx;

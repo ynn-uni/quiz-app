@@ -94,7 +94,7 @@ import { getLotteryList} from "../../apis";
 			height:46rpx;
 			background:rgba(205,175,255,1);
 			.back,.next{
-				font-size:24rpx;
+				font-size:26rpx;
 				font-weight:400;
 				color:rgba(246,241,239,1);
 				line-height:34rpx;
