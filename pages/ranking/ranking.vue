@@ -48,13 +48,14 @@
 				
 			</view>
 		</view>
-		<!-- <view class="own text-center">
-			当前我的排名343437
-		</view> -->
+		<view class="own text-center">
+			当前我的排名{{userInfo.today_rank || 0}}
+		</view>
 	</view>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getScoreRankingList } from '../../apis';
 	export default {
 		data() {
@@ -63,6 +64,9 @@ import { getScoreRankingList } from '../../apis';
 				height:'0',
 				ranking:[]
 			}
+		},
+		computed: {
+    ...mapGetters(['userInfo'])
 		},
 		onLoad() {
 			//适应排行榜列表显示高度
