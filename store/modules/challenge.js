@@ -51,6 +51,9 @@ export default {
     },
     closeWebsocket({ state, commit }) {
       state.socketInstance.close();
+      commit('updateUserScore', 0);
+      commit('updateOpponentScore', 0);
+      commit('updateSocketInstance', null);
     },
     uploadSocre({ state }, score) {
       state.socketInstance.send({
@@ -60,7 +63,7 @@ export default {
         }
       });
     },
-    finishQuiz({ state, commit }) {
+    finishQuiz({ state }) {
       state.socketInstance.send({
         operate: 'OVER',
         data: 'OVER'
