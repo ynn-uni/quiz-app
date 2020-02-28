@@ -5,15 +5,15 @@
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-people margin-right-sm color_mycuicon'></text>
-			<input placeholder="姓名" name="input" v-model="name" disabled></input>
+			<input placeholder="姓名" name="input" v-model="userInfo.truename||null" disabled></input>
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-phone margin-right-sm color_my'></text>
-			<input placeholder="电话" name="input" v-model="tel" disabled></input>
+			<input placeholder="电话" name="input" v-model="userInfo.phone||null" disabled></input>
 		</view>
 		<view class="cu-form-group my-group margin-tb-xs">
 			<text class='cuIcon-location margin-right-sm color_mycuicon'></text>
-			<input placeholder="地址" name="input" v-model="address" disabled></input>
+			<input placeholder="地址" name="input" v-model="userInfo.address||null" disabled></input>
 		</view>
 		<!-- <button class="cu-btn round lg bg-orange margin-top-sm" @click="save">保存</button> -->
 		<button class="cu-btn round lg bg-orange margin-top-sm" @tap='wxaddress'>编辑</button>
@@ -22,6 +22,7 @@
 
 <script>
 import {setUserInfo} from '../../../apis'
+import { mapGetters } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -31,7 +32,9 @@ import {setUserInfo} from '../../../apis'
 			}
 		},
 		// /User/setUserInfo
-		
+		computed: {
+    ...mapGetters(['userInfo'])
+  },
 		methods: {
 			wxaddress() {
 			    const that=this
@@ -65,23 +68,24 @@ import {setUserInfo} from '../../../apis'
 			    })
 			},
 			 setAddressInfo(data){
-				 this.name=data.userName
-				 this.tel=data.telNumber
-				 this.address=data.cityName+data.countyName+data.detailInfo
+				 this.userInfo.truename=data.userName
+				 this.userInfo.phone=data.telNumber
+				 this.userInfo.address=data.cityName+data.countyName+data.detailInfo
+				 
 				 this.save()
 			 },
 			save(){
-				console.log(this.name,this.tel,this.address)
-				if(this.name&&this.tel&&this.address){
+			
+				
 					setUserInfo({
-						truename:this.name,
-						mobile:this.tel,
-						address:this.address
+						truename:this.userInfo.truename,
+						mobile:this.userInfo.phone,
+						address:this.userInfo.address
 					}).then((res)=>{
 						console.log(res)
 						if(res.status==200){
 								uni.showToast({
-									title: '成功',
+									title: '保存成功',
 									icon: 'none'
 							});
 						}else{
@@ -91,11 +95,7 @@ import {setUserInfo} from '../../../apis'
 							});
 						}
 					})
-				}else{
-					uni.showModal({
-						title:"请填完基本信息"
-					})
-				}
+				
 			}
 		}
 	}

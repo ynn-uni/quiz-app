@@ -121,6 +121,7 @@ export default {
     // 从后端获取用户信息
     fatchUserInfoByToken() {
       getUserInfoApi().then(res => {
+        console.log(res);
         const {
           battle,
           defeat,
@@ -134,7 +135,10 @@ export default {
           train,
           today_rank,
           today_score,
-          experience
+          experience,
+          address,
+          truename,
+          phone
         } = res.data;
         const userinfo = {
           name: nickname,
@@ -149,7 +153,10 @@ export default {
           train,
           today_rank,
           today_score,
-          experience
+          experience,
+          address, //收货地址相关信息
+          truename,
+          phone
         };
         this.$store.commit('user/updateUserInfo', userinfo);
       });
