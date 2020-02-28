@@ -88,12 +88,12 @@ export default {
       this.$store.commit('challenge/updateUserScore', this.userScore + score);
       this.$store.dispatch('challenge/uploadSocre', score);
     },
-    nextQuestion() {
-      if (this.isFinished) {
-        this.handleFinish();
-        return;
-      }
+    nextQuestion(msg) {
       if (this.nextFlag === true) {
+        if (this.isFinished) {
+          this.handleFinish();
+          return;
+        }
         this.disableClick = true;
         setTimeout(() => {
           this.curIndex++;
