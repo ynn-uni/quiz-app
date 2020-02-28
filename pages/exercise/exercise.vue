@@ -63,7 +63,7 @@ export default {
         confirmText: '再次练习',
         success: function(res) {
           if (res.confirm) {
-            uni.navigateTo({
+            uni.redirectTo({
               url: '/pages/exercise/exercise'
             });
           } else if (res.cancel) {
