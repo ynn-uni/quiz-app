@@ -64,8 +64,13 @@ export default {
       path: '/pages/index/index'
     };
   },
-  onShow() {
+  onLoad() {
     this.wxLogin();
+  },
+  onShow() {
+    if (this.token) {
+      this.fatchUserInfoByToken();
+    }
   },
   methods: {
     //登陆相关
