@@ -185,9 +185,15 @@ export default {
     },
     turnToPage() {
       const urlKey = this.selectedMode + 'Url';
-      uni.navigateTo({
-        url: this[urlKey]
-      });
+      uni
+        .navigateTo({
+          url: this[urlKey]
+        })
+        .then(() => {
+          setTimeout(() => {
+            this.selectedMode = null;
+          }, 1000);
+        });
     }
   }
 };
