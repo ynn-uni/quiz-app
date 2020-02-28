@@ -13,7 +13,7 @@ export default {
       uni.navigateTo({
         url: '/pages/index/index'
       });
-    }, 2000);
+    }, 3000);
   }
 };
 </script>

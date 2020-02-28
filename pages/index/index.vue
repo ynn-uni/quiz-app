@@ -64,11 +64,6 @@ export default {
       path: '/pages/index/index'
     };
   },
-  onLoad() {
-    if (!this.token) {
-      this.wxLogin();
-    }
-  },
   onShow() {
     if (this.token) {
       this.fatchUserInfoByToken();
