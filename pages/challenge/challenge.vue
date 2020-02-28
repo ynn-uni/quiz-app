@@ -1,6 +1,6 @@
 <template>
   <view class="bg-linear">
-    <cu-custom :isBack="true">
+    <cu-custom :isBack="isDisplay('OVER') || isDisplay('REVIEW')">
       <block slot="backText">返回</block>
       <block slot="content">擂台挑战</block>
     </cu-custom>
@@ -36,7 +36,7 @@ export default {
       'socketInstance'
     ])
   },
-  onShow: function(options) {
+  onLoad: function(options) {
     this.statusIndex = 0;
     this.initWebsocket().then(instance => {
       instance.onmessage = evt => {
