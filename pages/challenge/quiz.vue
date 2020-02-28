@@ -1,14 +1,13 @@
 <template>
   <view class="quiz">
     <user-pannel ref="pannel" :pk="true" :time="countNum" />
-    <subject
-      ref="subject"
-      type="pk"
-      :list="questions"
+    <Question
+      ref="question"
+      :question="curQuestion"
       :show-answer="showAnswer"
+      :disabled="disableClick"
       @select="onUserSelect"
-      @finish="handleFinish"
-    ></subject>
+    ></Question>
     <view class="score animation-reverse animation-slide-top" v-if="scoreAnim">
       <text>+</text>
       {{ curScore }}
@@ -18,7 +17,7 @@
 
 <script>
 import UserPannel from '../../components/user-pannel.vue';
-import Subject from '../../components/subject.vue';
+import Question from '../../components/Question.vue';
 import { mapGetters } from 'vuex';
 export default {
   props: {
@@ -27,7 +26,7 @@ export default {
       default: () => []
     }
   },
-  components: { UserPannel, Subject },
+  components: { UserPannel, Question },
   data() {
     return {
       limitTime: 10,
@@ -35,24 +34,40 @@ export default {
       timerId: null,
       scoreAnim: false,
       curScore: 0,
-      finished: false,
       nextFlag: false,
-      showAnswer: false
+      showAnswer: false,
+      disableClick: false,
+      curIndex: 0
     };
   },
   computed: {
-    ...mapGetters(['userScore', 'opponentScore'])
+    ...mapGetters(['userScore', 'opponentScore']),
+    curQuestion() {
+      return this.questions[this.curIndex];
+    },
+    isFinished() {
+      return this.curIndex + 1 === this.questions.length;
+    }
   },
   mounted() {
     this.start();
   },
+  /**
+   * 流程：
+   * 1. 进入页面，开始计时
+   * 2. 用户选择或timeout
+   * 3. 计算分数并同步:
+   * 4. 下一题
+   */
   methods: {
     start() {
       this.countDown();
     },
     onUserSelect(val) {
+      const { isRight, selected } = val;
+      this.storeUserAnswer(selected);
       this.stopCountDown();
-      this.calcScore(val);
+      this.calcScore(isRight);
       this.nextQuestion();
     },
     timeOut() {
@@ -62,6 +77,10 @@ export default {
       // 当事件结束时显示答案
       this.showAnswer = true;
     },
+    storeUserAnswer(answer) {
+      this.curQuestion.selected = answer;
+      this.$store.commit('challenge/updateQuestionList', this.questions);
+    },
     calcScore(rightAnswer) {
       const score = rightAnswer ? this.countNum * 10 : 0;
       this.curScore = score;
@@ -70,15 +89,20 @@ export default {
       this.$store.dispatch('challenge/uploadSocre', score);
     },
     nextQuestion() {
-      if (this.finished) return;
-
+      if (this.isFinished) {
+        this.handleFinish();
+        return;
+      }
       if (this.nextFlag === true) {
+        this.disableClick = true;
         setTimeout(() => {
-          this.$refs.subject.turnToNext();
+          this.curIndex++;
           this.reset();
+          this.$refs.question.resetResult();
           this.nextFlag = false;
           this.showAnswer = false;
-        }, 1500);
+          this.disableClick = false;
+        }, 1000);
       } else {
         this.nextFlag = true;
       }
@@ -103,7 +127,6 @@ export default {
     },
     handleFinish() {
       this.stopCountDown();
-      this.finished = true;
       this.$store.dispatch('challenge/finishQuiz');
     }
   }

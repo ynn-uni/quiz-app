@@ -88,6 +88,7 @@ class WebSocketUtils {
   }
 
   send(data) {
+    console.warn('send -> ', data);
     if (typeof data !== 'string') {
       data = JSON.stringify(data);
     }
@@ -109,7 +110,6 @@ class WebSocketUtils {
         operate: 'PING',
         data: pingMsg
       });
-      console.warn('send -> ', pingMsg);
 
       // 如果超过一定时间还没重置，说明后端主动断开了
       this.pongTimeoutId = setTimeout(() => {
