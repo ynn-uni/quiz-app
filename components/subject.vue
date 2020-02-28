@@ -141,16 +141,12 @@ export default {
       }
     },
     turnToNext(delay = 0) {
-      setTimeout(() => {
-        this.changeIndex(1);
-        this.selectOptionId = null;
-      }, delay);
+      this.changeIndex(1);
+      this.selectOptionId = null;
     },
     turnToPrev(delay = 0) {
-      setTimeout(() => {
-        this.changeIndex(-1);
-        this.selectOptionId = null;
-      }, delay);
+      this.changeIndex(-1);
+      this.selectOptionId = null;
     },
     changeIndex(step) {
       const length = this.list.length;
