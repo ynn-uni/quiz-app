@@ -75,7 +75,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('user', ['wxLogin', 'fatchUserInfoByToken']),
+    ...mapActions('user', [
+      'wxLogin',
+      'fatchUserInfoByToken',
+      'loginWithUserInfo'
+    ]),
     //登陆相关
     // wxLogin() {
     //   uni.login({
@@ -184,7 +188,7 @@ export default {
     },
     handleModalConfirm(evt) {
       const { iv, encryptedData } = evt;
-      this.loginWithUserInfo(iv, encryptedData);
+      this.loginWithUserInfo({ iv, encryptedData });
     },
     turnToPage() {
       const urlKey = this.selectedMode + 'Url';
