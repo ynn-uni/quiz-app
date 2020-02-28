@@ -5,6 +5,7 @@
       ref="question"
       :question="curQuestion"
       :show-answer="showAnswer"
+      :disabled="disableClick"
       @select="onUserSelect"
     ></Question>
     <view class="score animation-reverse animation-slide-top" v-if="scoreAnim">
@@ -35,6 +36,7 @@ export default {
       curScore: 0,
       nextFlag: false,
       showAnswer: false,
+      disableClick: false,
       curIndex: 0
     };
   },
@@ -92,12 +94,14 @@ export default {
         return;
       }
       if (this.nextFlag === true) {
+        this.disableClick = true;
         setTimeout(() => {
           this.curIndex++;
           this.reset();
           this.$refs.question.resetResult();
           this.nextFlag = false;
           this.showAnswer = false;
+          this.disableClick = false;
         }, 1000);
       } else {
         this.nextFlag = true;
