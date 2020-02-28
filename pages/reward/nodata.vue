@@ -1,5 +1,5 @@
 <template>
-	<view class="nodata flex flex-direction align-center justify-center" :style="{'height':height+'px'}">
+	<view class="nodata flex flex-direction align-center justify-center">
 		<image src="../../static/images/reword_jiayou.png" mode=""></image>
 		<view class="text margin-top-lg">
 			您暂未获得任何奖品，加油鸭！
@@ -25,6 +25,10 @@
 </script>
 
 <style scoped lang="scss">
+.nodata{
+	width: 100%;
+	height: 100%;
+}
 	image{
 		width:200rpx;
 		height:270rpx;

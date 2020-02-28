@@ -7,11 +7,11 @@
 		<view class="reward flex flex-direction align-center">
 			<view class="reward_img flex flex-direction align-center">
 				<image src="../../static/images/reword_kouzhao.png" mode=""></image>
-				<view class="text margin-tb-xs">
+				<!-- <view class="text margin-tb-xs">
 					口罩一只
-				</view>
+				</view> -->
 			</view>
-			<view class="title flex justify-center">
+			<view class="title flex justify-center margin-top-xs">
 				<image src="../../static/images/reword_tab.png" mode=""></image>
 				<view class="text">
 					本期奖品
@@ -39,9 +39,8 @@
 						</view>
 					</view>
 					<view class="data" >
-						<NoData v-if="status=='01'||status=='02'" :height="height"></NoData>
-						<MyReward v-if="status=='1'" :height="height" v-on:ListenChild="ShowChild"></MyReward>
-						<PastReward v-if="status=='2'" :height="height" v-on:ListenChild="ShowChild"></PastReward>
+						<MyReward v-if="status=='1'" :height="height" @nodata="noData"></MyReward>
+						<PastReward v-if="status=='2'" :height="height"></PastReward>
 					</view>
 				</view>
 			
@@ -59,7 +58,7 @@
 		data() {
 			return {
 				// nodata:true,
-				status:'1',//0没有数据 1查看我的获奖记录 2 查看往期记录
+				status:'1',// 1查看我的获奖记录 2 查看往期记录
 				height:'0'
 			}
 		},
@@ -80,7 +79,7 @@
 			 }).exec()
 			 info.select(".data").boundingClientRect(function(data) { //data - 各种参数
 			 // 　console.log(height-(data.top-top),data.top) 
-			  that.height=height-(data.top-top)
+			  that.height=height-(data.top-top)-30
 			  // console.log(that.height) 
 			 }).exec()
 			
@@ -89,10 +88,7 @@
 		methods: {
 			changeStatus(stauts){
 				this.status=stauts
-			},
-			 ShowChild: function(data) {
-				this.status=data
-			},
+			}
 		}
 	}
 </script>

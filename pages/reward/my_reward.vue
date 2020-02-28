@@ -1,11 +1,12 @@
 <template>
 	<view class="my_reward" :style="{'height':height+'px'}">
-		<view class="item flex align-center padding-tb-sm" v-for="(item,index) in lotteryUserList" :key="index">
+		<view v-if="ishavedata">
+		<view  class="item flex align-center justify-between padding-tb-sm" v-for="(item,index) in lotteryUserList" :key="index">
 			<view class="data">
 				{{index+1}}、{{item.date}}
 			</view>
 			<image src="../../static/images/reword_kouzhao.png" mode=""></image>
-			<view class="num">
+			<view class="num ">
 				x10
 			</view>
 			<!-- <view class="btn">
@@ -14,7 +15,9 @@
 			<!-- <button class="btn active" @tap="showModal" data-target="DialogModal1">点击兑换</button> -->
 			
 		</view>
-		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+		</view>
+		<NoData v-if="!ishavedata"></NoData>
+		<view class="cu-modal" :class="modalName=='showModel'?'show':''">
 			<view class="cu-dialog">
 				
 				<view class="padding-xl text-center my_text">
@@ -37,30 +40,34 @@
 
 <script>
 import { getLotteryUserList } from "../../apis";
+import NoData from './nodata.vue'
 	export default {
 		data() {
 			return {
 				modalName: null,
-				lotteryUserList:[]
+				lotteryUserList:[],
+				ishavedata:true
 			}
 		},
 		props:{
 			height:String
 		},
+		components:{
+			NoData
+		},
 		mounted() {
 			getLotteryUserList().then((res)=>{
-				console.log(res)
 				
 				if(res.data.length>0){
 					this.lotteryUserList=res.data
 				}else{
-					this.$emit('ListenChild', '01');
+					this.ishavedata=false;
 				}
 			})
   	},
 		methods: {
 			showModal(e) {
-				this.modalName = e.currentTarget.dataset.target
+				this.modalName = 'showModel'
 			},
 			hideModal(e) {
 				this.modalName = null
@@ -92,7 +99,7 @@ import { getLotteryUserList } from "../../apis";
 				font-size:24rpx;
 				font-weight:600;
 				color:rgba(95,1,151,1);
-				margin-right: 64rpx;
+				// margin-right: 64rpx;
 			}
 			.btn{
 				text-align: center;
