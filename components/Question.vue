@@ -79,7 +79,7 @@ export default {
       if (this.selectOptionId != null || this.disabled) return;
       this.selectOptionId = evt;
       this.$emit('select', {
-        isRight: true,
+        isRight: this.isRight,
         selected: this.selectOptionId
       });
     }
