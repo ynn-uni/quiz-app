@@ -50,7 +50,7 @@ export default {
 		font-weight: bold;
 		text-indent: 1em;
 		color: #fff;
-		opacity: 0.1;
+		opacity: 0;
 	}
 	.left-side,
 	.right-side {
