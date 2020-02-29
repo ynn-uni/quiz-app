@@ -16,41 +16,41 @@
         active-color="#ffce24"
         :active="true"
       />
-      <view class="progress-label">lv{{ userInfo.level|0 }}</view>
+      <view class="progress-label">lv{{ userInfo.level||0 }}</view>
     </view>
     <view class="sorce flex justify-center align-center">
       <image src="../../../static/images/gem.png" mode />积分
-      <view class="num">{{userInfo.credit|0}}分</view>
+      <view class="num">{{userInfo.credit||0}}分</view>
     </view>
     <view class="info">
       <view class="info_item flex align-center margin-tb-sm">
         <view class="left flex justify-center align-center">
           <view class="title">用户编号：</view>
-          <view class="val">{{userInfo.id|0}}</view>
+          <view class="val">{{userInfo.id||0}}</view>
         </view>
         <view class="right flex justify-center align-center">
           <view class="title">用户等级：</view>
-          <view class="val">lv{{userInfo.level|0}}</view>
+          <view class="val">lv{{userInfo.level||0}}</view>
         </view>
       </view>
       <view class="info_item flex align-center margin-tb-sm">
         <view class="left flex justify-center align-center">
           <view class="title">胜率：</view>
-          <view class="val">{{winRate|0}}%</view>
+          <view class="val">{{winRate||0}}%</view>
         </view>
         <view class="right flex justify-center align-center">
           <view class="title">总场次：</view>
-          <view class="val">{{userInfo.battle|0}}场</view>
+          <view class="val">{{userInfo.battle||0}}场</view>
         </view>
       </view>
       <view class="info_item flex align-center margin-tb-sm">
         <view class="left flex justify-center align-center">
           <view class="title">经验：</view>
-          <view class="val">{{userInfo.experience.current|0}}/{{userInfo.experience.need|0}}</view>
+          <view class="val">{{userInfo.experience.current||0}}/{{userInfo.experience.need||0}}</view>
         </view>
         <view class="right flex justify-center align-center">
           <view class="title">胜场：</view>
-          <view class="val">{{(userInfo.battle - userInfo.defeat)|0}}场</view>
+          <view class="val">{{(userInfo.battle - userInfo.defeat)||0}}场</view>
         </view>
       </view>
     </view>

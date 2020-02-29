@@ -5,7 +5,7 @@
 				<image :src="userInfo.avatar"></image>
 			</view>
 			<view class="pannel-text">
-				<text>{{ userInfo.name }}</text>
+				<text>{{ userInfo.name || '' }}</text>
 				<view class="text-lg">
 					{{ pk ? userScore : content }}
 				</view>
@@ -19,7 +19,7 @@
 				<image :src="opponentInfo.avatar"></image>
 			</view>
 			<view class="pannel-text text-right">
-				<text>{{ opponentInfo.name }}</text>
+				<text>{{ opponentInfo.name || '' }}</text>
 				<view class="text-lg">
 					{{ opponentScore }}
 				</view>
