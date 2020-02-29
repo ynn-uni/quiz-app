@@ -1,16 +1,28 @@
 .bg-linear {
-	min-height: 100vh;
-	background:linear-gradient(135deg,rgba(101,0,140,1) 0%,rgba(78,7,186,1) 67%,rgba(19,1,174,1) 100%);
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(101, 0, 140, 1) 0%,
+    rgba(78, 7, 186, 1) 67%,
+    rgba(19, 1, 174, 1) 100%
+  );
 }
 
 /* 覆盖微信原生样式 */
 .wx-progress-inner-bar {
-	border-radius: 14px;
+  border-radius: 14px;
 }
 
 .btn-hover-trans {
-	transform: translate(4rpx, 4rpx);
+  transform: translate(4rpx, 4rpx);
 }
 .btn-hover-scale {
-	transform: scale(90%);
+  transform: scale(90%);
+}
+
+.serial-number {
+  color: #fff;
+  font-size: 40rpx;
+  padding: 0rpx 80rpx;
+  text-shadow: 4px 3px 0 #7a7a7a, 2px 2px 2px rgba(206, 89, 55, 0);
 }
