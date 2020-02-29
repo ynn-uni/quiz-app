@@ -1,4 +1,7 @@
 export default {
+  requesting: state => {
+    return state.user.requesting;
+  },
   token: state => {
     return state.user.token;
   },

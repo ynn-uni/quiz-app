@@ -40,7 +40,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(['userInfo', 'token'])
+    ...mapGetters(['userInfo', 'token', 'requesting'])
   },
   onShareAppMessage(e) {
     return {
@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     checkLogin(url) {
+      if (this.requesting) return;
       if (!this.token) {
         this.$emit('nologin');
         return;
