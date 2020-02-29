@@ -1,6 +1,6 @@
 <template>
   <view class="bg-linear">
-    <cu-custom :isBack="isDisplay('OVER') || isDisplay('REVIEW')">
+    <cu-custom :isBack="isDisplay('MATCH') || isDisplay('OVER') || isDisplay('REVIEW')">
       <block slot="backText">返回</block>
       <block slot="content">擂台挑战</block>
     </cu-custom>
