@@ -1,26 +1,27 @@
 <template>
-  <view class="question-wrap" :style="{'margin-top': '100rpx'}">
-    <view class="title padding-lr">
+  <view class="question-wrap">
+    <view class="flex align-center title">
       <text>{{ question.title }}</text>
     </view>
-    <view class="options"></view>
-    <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
-      <button
-        :class="[
-						'cu-btn round text-purple bg-white',
-						item.id === selectOptionId && isRight === true ? 'is-right' : '',
-						item.id === selectOptionId && isRight === false ? 'is-wrong' : ''
-					]"
-        @click="handleSelect(item.id)"
-      >
-        <text
-          v-if="item.id === question.answer"
-          :style="checkIconColor"
-          class="status cuIcon-check text-orange"
-        ></text>
-        <text v-if="item.id !== question.answer" class="status cuIcon-close"></text>
-        {{ item.content }}
-      </button>
+    <view class="options">
+      <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
+        <button
+          :class="[
+              'cu-btn round text-purple bg-white',
+              item.id === selectOptionId && isRight === true ? 'is-right' : '',
+              item.id === selectOptionId && isRight === false ? 'is-wrong' : ''
+            ]"
+          @click="handleSelect(item.id)"
+        >
+          <text
+            v-if="item.id === question.answer"
+            :style="checkIconColor"
+            class="status cuIcon-check text-orange"
+          ></text>
+          <text v-if="item.id !== question.answer" class="status cuIcon-close"></text>
+          {{ item.content }}
+        </button>
+      </view>
     </view>
   </view>
 </template>
@@ -91,47 +92,36 @@ export default {
 .question-wrap {
   text-align: center;
   .title {
+    height: 280rpx;
+    padding: 20rpx 100rpx 20rpx;
+    text-align: left;
     font-size: 32rpx;
+    line-height: 1.6em;
     color: #fff;
+    overflow: scroll;
   }
 
   .options {
-    margin-top: 80rpx;
-  }
-
-  .option-item {
-    position: relative;
-    margin-top: 60rpx;
-    .status {
-      position: absolute;
-      top: 50%;
-      left: 20rpx;
-      color: #fff;
-      font-size: 40rpx;
-      font-weight: bold;
-    }
-  }
-
-  .action {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 100rpx;
-    .action-btn {
-      margin: 30rpx 0;
-    }
-    navigator {
-      margin-top: 20rpx;
+    height: 460rpx;
+    .option-item {
+      position: relative;
+      margin-top: 36rpx;
+      .status {
+        position: absolute;
+        top: 60%;
+        left: 20rpx;
+        color: #fff;
+        font-size: 40rpx;
+        font-weight: bold;
+      }
     }
   }
 
   .cu-btn {
     position: relative;
-    padding-top: 40rpx;
-    padding-bottom: 40rpx;
-    width: 50%;
-    font-size: 36rpx;
+    padding: 24rpx;
+    width: 60%;
+    font-size: 32rpx;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
     .status {
       position: absolute;
@@ -139,7 +129,7 @@ export default {
       margin-top: -20rpx;
       left: 20rpx;
       color: #fff;
-      font-size: 40rpx;
+      font-size: 36rpx;
       font-weight: bold;
     }
     &.is-right {
