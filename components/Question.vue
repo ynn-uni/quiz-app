@@ -72,6 +72,18 @@ export default {
       return `color: ${flag ? '#F38B00' : '#fff'}`;
     }
   },
+  watch: {
+    //回顾问题时，当问题中包含selected字段时，激活选中该选项
+    'question.selected': {
+      handler(val) {
+        if (val) {
+          this.selectOptionId = val;
+        } else {
+          this.selectOptionId = null;
+        }
+      }
+    }
+  },
   methods: {
     resetResult() {
       this.selectOptionId = null;
@@ -126,7 +138,7 @@ export default {
     .status {
       position: absolute;
       top: 50%;
-      margin-top: -20rpx;
+      margin-top: -26rpx;
       left: 20rpx;
       color: #fff;
       font-size: 36rpx;
