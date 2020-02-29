@@ -17,11 +17,11 @@
             item.id === selectOptionId && isRight === true ? 'is-right' : '',
             item.id === selectOptionId && isRight === false ? 'is-wrong' : '',
             showAnimation && item.id === selectOptionId && isRight === false ? 'animation-shake' : '',
-            showAnimation && slideOut ? 'option-slide-botton' : ''
           ]"
           @click="handleSelect(item.id)"
           :style="{'animation-delay':  `0.${question.options.length - index}s` }"
         >
+          <!-- showAnimation && slideOut ? 'option-slide-botton' : '' -->
           <text
             v-if="item.id === question.answer"
             :style="checkIconColor"
