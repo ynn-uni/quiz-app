@@ -11,6 +11,7 @@
       :question="curQuestion"
       :disabled="true"
       :show-answer="true"
+      :show-animation="false"
       @select="handleSelect"
     />
     <view class="action-wrap">

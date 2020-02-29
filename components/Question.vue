@@ -1,17 +1,26 @@
 <template>
   <view class="question-wrap">
-    <view class="flex align-center title">
+    <view
+      class="flex align-center title"
+      :class=" {
+        'animation-slide-left': slideIn,
+        'animation-slide-right': slideOut,
+        'animation-reverse': slideOut
+      }"
+    >
       <text>{{ question.title }}</text>
     </view>
     <view class="options">
-      <view class="option-item margin-top" v-for="item in question.options" :key="item.id">
+      <view class="option-item margin-top" v-for="(item, index) in question.options" :key="item.id">
         <button
-          :class="[
-              'cu-btn round text-purple bg-white',
-              item.id === selectOptionId && isRight === true ? 'is-right' : '',
-              item.id === selectOptionId && isRight === false ? 'is-wrong' : ''
-            ]"
+          :class="['cu-btn round text-purple bg-white',
+            item.id === selectOptionId && isRight === true ? 'is-right' : '',
+            item.id === selectOptionId && isRight === false ? 'is-wrong' : '',
+            showAnimation && item.id === selectOptionId && isRight === false ? 'animation-shake' : '',
+            showAnimation && slideOut ? 'option-slide-botton' : ''
+          ]"
           @click="handleSelect(item.id)"
+          :style="{'animation-delay':  `0.${question.options.length - index}s` }"
         >
           <text
             v-if="item.id === question.answer"
@@ -40,11 +49,17 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    showAnimation: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
-      selectOptionId: null
+      selectOptionId: null,
+      slideIn: this.showAnimation ? true : false,
+      slideOut: false
     };
   },
   computed: {
@@ -73,6 +88,17 @@ export default {
     }
   },
   watch: {
+    'question.title': {
+      handler(val, oldVal) {
+        if (val !== oldVal && this.showAnimation) {
+          this.slideOut = true;
+          setTimeout(() => {
+            this.slideIn = true;
+            this.slideOut = false;
+          }, 500);
+        }
+      }
+    },
     //回顾问题时，当问题中包含selected字段时，激活选中该选项
     'question.selected': {
       handler(val) {
@@ -85,6 +111,15 @@ export default {
     }
   },
   methods: {
+    buttonClass(item) {
+      return {
+        'is-right': item.id === this.selectOptionId && this.isRight === true,
+        'is-wrong': item.id === this.selectOptionId && this.isRight === false,
+        'animation-reverse': this.slideOut,
+        'animation-slide-bottom': this.slideOut,
+        'animation-shake': this.showAnimation && this.isRight === false
+      };
+    },
     resetResult() {
       this.selectOptionId = null;
     },
@@ -127,6 +162,10 @@ export default {
         font-weight: bold;
       }
     }
+    .option-slide-botton {
+      animation-duration: 0.3s;
+      animation-name: btn-slide-bottom;
+    }
   }
 
   .cu-btn {
@@ -153,5 +192,31 @@ export default {
       background-color: $color-red;
     }
   }
+}
+@keyframes btn-slide-bottom {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(800rpx);
+  }
+}
+.animation-delay-0 {
+  animation-delay: 0s;
+}
+.animation-delay-1 {
+  animation-delay: 0.1s;
+}
+.animation-delay-2 {
+  animation-delay: 0.2s;
+}
+.animation-delay-3 {
+  animation-delay: 0.3s;
+}
+.animation-delay-4 {
+  animation-delay: 0.4s;
 }
 </style>
