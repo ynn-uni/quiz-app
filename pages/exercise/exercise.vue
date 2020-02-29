@@ -33,7 +33,6 @@
 
 <script>
 import UserPannel from '../../components/user-pannel.vue';
-import Subject from '../../components/subject.vue';
 import Question from '../../components/Question.vue';
 import { getQuestions } from '../../apis/index';
 import { mapGetters } from 'vuex';
