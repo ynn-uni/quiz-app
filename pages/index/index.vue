@@ -34,7 +34,7 @@
         </view>-->
       </view>
 
-      <login-modal ref="modal" @confirm="handleModalConfirm"></login-modal>
+      <login-modal ref="modal" @confirm="handleModalConfirm" @cancel="handleModalCancel"></login-modal>
     </view>
   </view>
 </template>
@@ -99,6 +99,9 @@ export default {
     handleModalConfirm(evt) {
       const { iv, encryptedData } = evt;
       this.loginWithUserInfo({ iv, encryptedData });
+    },
+    handleModalCancel() {
+      this.updateRequestingStatus(false);
     },
     turnToPage() {
       const urlKey = this.selectedMode + 'Url';
