@@ -4,7 +4,8 @@ export default {
   state: {
     userInfo: {},
     token: '',
-    code: ''
+    code: '',
+    requesting: false
   },
   mutations: {
     updateUserInfo(state, userInfo) {
@@ -15,17 +16,24 @@ export default {
     },
     updateCodeOnce(state, code) {
       state.code = code;
+    },
+    updateRequestingStatus(state, status) {
+      state.requesting = status;
     }
   },
   actions: {
     // 登录
     wxLogin({ commit, dispatch }) {
-      uni.login({
-        success: res => {
-          // 获取code
-          commit('updateCodeOnce', res.code);
-          dispatch('checkUserSetting');
+      dispatch('getWxCode');
+      dispatch('checkUserSetting');
+    },
+    getWxCode({ commit }) {
+      return uni.login().then(res => {
+        const [error, data] = res;
+        if (error) {
+          console.error(error);
         }
+        commit('updateCodeOnce', data.code);
       });
     },
     // 检查用户授权设置
@@ -42,7 +50,7 @@ export default {
       });
     },
     // 获取微信的用户信息
-    getWxUserInfo({ dispatch }) {
+    getWxUserInfo({ state, dispatch }) {
       uni
         .getUserInfo({
           withCredentials: true
@@ -54,7 +62,11 @@ export default {
           }
           if (data) {
             const { iv, encryptedData } = data;
-            dispatch('loginWithUserInfo', { iv, encryptedData });
+            if (state.code) {
+              dispatch('loginWithUserInfo', { iv, encryptedData });
+            } else {
+              console.log('code is not exsit');
+            }
           }
         });
     },
@@ -64,6 +76,7 @@ export default {
         code: state.code,
         ...payload // iv, encryptedData
       }).then(res => {
+        commit('updateCodeOnce', null);
         commit('updateToken', res.data.token);
         dispatch('fatchUserInfoByToken');
       });
@@ -109,6 +122,7 @@ export default {
           phone
         };
         commit('updateUserInfo', userinfo);
+        commit('updateRequestingStatus', false);
       });
     }
   }

@@ -30,7 +30,6 @@
           </view>
         </view>
         <!-- <view class="index-go" hover-class="btn-hover-trans">
-        <button class="cu-btn setting sm block" open-type="openSetting">授权设置</button>
           <image class="btn-image" src="../../static/images/start.png" @click="turnToPage" />
         </view>-->
       </view>
@@ -45,7 +44,7 @@ import IndexHeader from './header.vue';
 import UserLevel from './level.vue';
 import { loginOrRegister, getUserInfoApi } from '../../apis';
 import LoginModal from '../../components/LoginModal.vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 export default {
   components: { IndexHeader, UserLevel, LoginModal },
   data() {
@@ -56,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['token'])
+    ...mapGetters(['token', 'requesting'])
   },
   onShareAppMessage(e) {
     return {
@@ -70,6 +69,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('user', ['updateRequestingStatus']),
     ...mapActions('user', [
       'wxLogin',
       'fatchUserInfoByToken',
@@ -84,8 +84,11 @@ export default {
       }, 0);
     },
     checkUserLogin: function(data) {
+      if (this.requesting) return;
       if (!this.token) {
         this.showAuthModal();
+        // requesting -> true，避免再次点击弹出窗口
+        this.updateRequestingStatus(true);
         return false;
       }
       return true;
