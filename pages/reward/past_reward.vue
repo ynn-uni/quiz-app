@@ -51,13 +51,15 @@ export default {
   },
   methods: {
     getDate(issue) {
-      var day1 = new Date();
-      var year = day1.getFullYear();
-      var month = day1.getMonth() + 1;
+      const now = new Date().getTime();
+      const dayTime = now + 1000 * 60 * 60 * 24 * issue;
+      const date = new Date(dayTime);
+      const year = date.getFullYear();
+      let month = date.getMonth() + 1;
       month = month < 10 ? '0' + month : month;
-      var day = day1.getDate() - 1 + issue;
-      this.date = year + '-' + month + '-' + day;
-      return year + '-' + month + '-' + day;
+      const day = date.getDate();
+      this.date = `${year}-${month}-${day}`;
+      return `${year}-${month}-${day}`;
     },
     getDataList() {
       var date = this.getDate(this.issue);
